@@ -10,7 +10,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JTable;
 
-public class docter extends JFrame {
+public class doctor extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
@@ -26,7 +26,7 @@ public class docter extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					docter frame = new docter();
+					doctor frame = new doctor();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -38,7 +38,7 @@ public class docter extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public docter() {
+	public doctor() {
 		setTitle("医生系统");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(456, 22, 581, 361);

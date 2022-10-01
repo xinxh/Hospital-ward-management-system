@@ -16,14 +16,11 @@ public class logindao {
 
 //	 链接数据库
 		public logindao(){
-
 			containt ct = new containt();
 			try {
 				Class.forName("com.mysql.cj.jdbc.Driver");
 				conn = DriverManager.getConnection(ct.url, ct.username, ct.password);
-				
 			} catch (ClassNotFoundException | SQLException e) {
-				
 				e.printStackTrace();
 			}
 		}
@@ -40,14 +37,17 @@ public class logindao {
 			ps.setString(2, password);
 			ResultSet rs=ps.executeQuery();
 			if(rs.next()) {
+				//后期删除
 				JOptionPane.showMessageDialog(null, "数据库链接成功", "提示信息", JOptionPane.WARNING_MESSAGE);
 				return true;
 			}else {
-				JOptionPane.showMessageDialog(null, "数据库链接失败", "提示信息", JOptionPane.WARNING_MESSAGE);
-				
-			return false;}
+				//后期删除
+				JOptionPane.showMessageDialog(null, "数据库链接成功", "提示信息", JOptionPane.WARNING_MESSAGE);
+				return false;
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+				//后期删除
 			JOptionPane.showMessageDialog(null, "数据库链接失败", "提示信息", JOptionPane.WARNING_MESSAGE);
 			return false;
 		}

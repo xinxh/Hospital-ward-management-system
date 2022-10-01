@@ -84,14 +84,14 @@ public class login extends JFrame {
 				logindao ld = new logindao();
 
 				if (ld.userlogin(uname, pawd)) {
+					//后期删除
 					JOptionPane.showMessageDialog(null, "登录成功", "提示信息", JOptionPane.WARNING_MESSAGE);
 					new manage();
 					dispose();
 				} else {
 					JOptionPane.showMessageDialog(null, "账号或者密码错误", "提示信息", JOptionPane.WARNING_MESSAGE);
-					
 				}
-			}
+				}
 			}
 
 		});
