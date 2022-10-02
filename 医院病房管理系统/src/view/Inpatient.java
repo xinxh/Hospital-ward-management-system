@@ -15,8 +15,8 @@ public class Inpatient extends JFrame {
 
 	private JPanel contentPane;
 	private JTable table;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField pname;
+	private JTextField pno;
 
 	/**
 	 * Launch the application.
@@ -82,35 +82,35 @@ public class Inpatient extends JFrame {
 	        }  
 		
 		
-		JLabel lblNewLabel = new JLabel("患者姓名");
-		lblNewLabel.setBounds(23, 25, 54, 15);
-		contentPane.add(lblNewLabel);
+		JLabel patientlabel = new JLabel("患者姓名");
+		patientlabel.setBounds(23, 25, 54, 15);
+		contentPane.add(patientlabel);
 		
-		JLabel lblNewLabel_1 = new JLabel("身份证");
-		lblNewLabel_1.setBounds(205, 25, 43, 15);
-		contentPane.add(lblNewLabel_1);
+		JLabel id = new JLabel("身份证");
+		id.setBounds(205, 25, 43, 15);
+		contentPane.add(id);
 		
-		JLabel lblNewLabel_2 = new JLabel("科室");
-		lblNewLabel_2.setBounds(449, 70, 36, 15);
-		contentPane.add(lblNewLabel_2);
+		JLabel onolabel = new JLabel("科室");
+		onolabel.setBounds(428, 25, 36, 15);
+		contentPane.add(onolabel);
 		
-		textField = new JTextField();
-		textField.setBounds(96, 22, 43, 21);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		pname = new JTextField();
+		pname.setBounds(96, 22, 66, 21);
+		contentPane.add(pname);
+		pname.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(258, 22, 121, 21);
-		contentPane.add(textField_1);
+		pno = new JTextField();
+		pno.setColumns(10);
+		pno.setBounds(258, 22, 121, 21);
+		contentPane.add(pno);
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(495, 66, 60, 23);
+		JComboBox ono = new JComboBox();
+		ono.setBounds(474, 21, 60, 23);
 		for (int i = 0; i < department.length; i++) {
-			comboBox.addItem(department[i]);
+			ono.addItem(department[i]);
 		}
 		;
-		contentPane.add(comboBox);
+		contentPane.add(ono);
 		
 		JButton btnNewButton = new JButton("住院");
 		btnNewButton.setBounds(462, 160, 93, 23);

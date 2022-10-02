@@ -1,5 +1,7 @@
 package view;
 
+import dao.Patientdao;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -14,13 +16,17 @@ import java.awt.event.ActionEvent;
 
 public class pay extends JFrame {
 
-	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTable table;
+	private String patientno;
+	private JPanel sickroomlabel;
+	private JTextField pno;
+	private JTextField pname;
+	private JTextField surplus;
+	private JTextField sickroom;
+	private JTextField newsurplus;
+	private JTable drug;
+
+
+
 
 	/**
 	 * Launch the application.
@@ -42,75 +48,80 @@ public class pay extends JFrame {
 	 * Create the frame.
 	 * @return 
 	 */
-	
-	
+//有参构造
+//无参构造
 	public pay() {
 		setTitle("缴费系统");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(446, 235, 581, 361);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		sickroomlabel = new JPanel();
+		sickroomlabel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		this.setVisible(true);
+		Patientdao padao=new Patientdao();
+		setContentPane(sickroomlabel);
+		sickroomlabel.setLayout(null);
+		
+		JLabel idlabel = new JLabel("身份证");
+		idlabel.setBounds(42, 24, 48, 15);
+		sickroomlabel.add(idlabel);
 
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		JLabel druglabel = new JLabel("已使用药品");
+		druglabel.setBounds(24, 133, 66, 15);
+		sickroomlabel.add(druglabel);
 		
-		JLabel lblNewLabel = new JLabel("身份证");
-		lblNewLabel.setBounds(42, 24, 48, 15);
-		contentPane.add(lblNewLabel);
+		JLabel pnamelabel = new JLabel("姓名");
+		pnamelabel.setBounds(42, 68, 41, 15);
+		sickroomlabel.add(pnamelabel);
 		
-		JLabel lblNewLabel_1 = new JLabel("姓名");
-		lblNewLabel_1.setBounds(42, 68, 41, 15);
-		contentPane.add(lblNewLabel_1);
-		
-		JLabel lblNewLabel_1_1 = new JLabel("当前余额");
-		lblNewLabel_1_1.setBounds(300, 68, 57, 15);
-		contentPane.add(lblNewLabel_1_1);
-		
-		textField = new JTextField();
-		textField.setBounds(100, 21, 173, 21);
-		contentPane.add(textField);
-		textField.setColumns(10);
-		
-		textField_1 = new JTextField();
-		textField_1.setBounds(100, 65, 66, 21);
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
-		
-		textField_2 = new JTextField();
-		textField_2.setBounds(367, 65, 79, 21);
-		contentPane.add(textField_2);
-		textField_2.setColumns(10);
-		
+		JLabel surpluslabel = new JLabel("当前余额");
+		surpluslabel.setBounds(300, 68, 57, 15);
+		sickroomlabel.add(surpluslabel);
+
 		JLabel lblNewLabel_1_2 = new JLabel("床位");
 		lblNewLabel_1_2.setBounds(300, 24, 41, 15);
-		contentPane.add(lblNewLabel_1_2);
+		sickroomlabel.add(lblNewLabel_1_2);
+
+		JLabel surpluslabel2 = new JLabel("缴费金额");
+		surpluslabel2.setBounds(85, 278, 54, 15);
+		sickroomlabel.add(surpluslabel2);
+
+		pno = new JTextField();
+		pno.setBounds(100, 21, 173, 21);
+		sickroomlabel.add(pno);
+		pno.setColumns(10);
 		
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
-		textField_3.setBounds(367, 21, 66, 21);
-		contentPane.add(textField_3);
+		pname = new JTextField();
+		pname.setBounds(100, 65, 66, 21);
+		sickroomlabel.add(pname);
+		pname.setColumns(10);
 		
-		JLabel lblNewLabel_2 = new JLabel("缴费金额");
-		lblNewLabel_2.setBounds(85, 278, 54, 15);
-		contentPane.add(lblNewLabel_2);
+		surplus = new JTextField();
+		surplus.setBounds(367, 65, 79, 21);
+		sickroomlabel.add(surplus);
+		surplus.setColumns(10);
 		
-		textField_4 = new JTextField();
-		textField_4.setColumns(10);
-		textField_4.setBounds(149, 275, 79, 21);
-		contentPane.add(textField_4);
+		sickroom = new JTextField();
+		sickroom.setColumns(10);
+		sickroom.setBounds(367, 21, 66, 21);
+		sickroomlabel.add(sickroom);
+
+		newsurplus = new JTextField();
+		newsurplus.setColumns(10);
+		newsurplus.setBounds(149, 275, 79, 21);
+		sickroomlabel.add(newsurplus);
 		
 		JButton btnNewButton = new JButton("确认缴费");
-		
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
 		btnNewButton.setBounds(300, 274, 93, 23);
-		contentPane.add(btnNewButton);
+		sickroomlabel.add(btnNewButton);
 		
-		table = new JTable();
-		table.setBounds(100, 133, 409, 112);
-		contentPane.add(table);
-		
-		JLabel lblNewLabel_2_1 = new JLabel("已使用药品");
-		lblNewLabel_2_1.setBounds(24, 133, 66, 15);
-		contentPane.add(lblNewLabel_2_1);
+		drug = new JTable();
+		drug.setBounds(100, 133, 409, 112);
+		sickroomlabel.add(drug);
+
 	}
 }

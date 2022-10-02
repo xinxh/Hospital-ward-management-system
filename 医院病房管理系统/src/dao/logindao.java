@@ -9,13 +9,12 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 import containt.containt;
-import view.login;
 
-public class logindao {
+public class Logindao {
 	Connection conn = null;
 
 //	 链接数据库
-		public logindao(){
+		public Logindao(){
 			containt ct = new containt();
 			try {
 				Class.forName("com.mysql.cj.jdbc.Driver");

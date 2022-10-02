@@ -1,27 +1,26 @@
 package view;
 
+import dao.Patientdao;
+
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import javax.swing.JTextField;
-import javax.swing.JTextArea;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 public class patient extends JFrame {
 
+	private JTextArea cure;
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTextField textField_5;
-	private JTextField textField_6;
+	private JTextField pname;
+	private JTextField dname_p;
+	private JTextField page;
+	private JTextField nname_p;
+	private JTextField surplus;
+	private JTextField sickroom;
+	private JTextField pno;
+
 
 	/**
 	 * Launch the application.
@@ -51,90 +50,113 @@ public class patient extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+
+		Patientdao padao=new Patientdao();
 		
-		JLabel lblNewLabel = new JLabel("姓名");
-		lblNewLabel.setBounds(34, 21, 33, 15);
-		contentPane.add(lblNewLabel);
+		JLabel pnamelabel = new JLabel("姓名");
+		pnamelabel.setBounds(34, 21, 33, 15);
+		contentPane.add(pnamelabel);
 		
-		JLabel lblNewLabel_1 = new JLabel("年龄");
-		lblNewLabel_1.setBounds(190, 21, 33, 15);
-		contentPane.add(lblNewLabel_1);
+		JLabel pagelabel = new JLabel("年龄");
+		pagelabel.setBounds(190, 21, 33, 15);
+		contentPane.add(pagelabel);
 		
-		JLabel lblNewLabel_2 = new JLabel("余额");
-		lblNewLabel_2.setBounds(373, 21, 33, 15);
-		contentPane.add(lblNewLabel_2);
+		JLabel surpluslabel = new JLabel("余额");
+		surpluslabel.setBounds(373, 21, 33, 15);
+		contentPane.add(surpluslabel);
 		
-		JLabel lblNewLabel_3 = new JLabel("主治医师");
-		lblNewLabel_3.setBounds(34, 68, 57, 15);
-		contentPane.add(lblNewLabel_3);
+		JLabel dnamelabel = new JLabel("主治医师");
+		dnamelabel.setBounds(34, 68, 57, 15);
+		contentPane.add(dnamelabel);
 		
-		JLabel lblNewLabel_3_1 = new JLabel("责任护士");
-		lblNewLabel_3_1.setBounds(190, 68, 57, 15);
-		contentPane.add(lblNewLabel_3_1);
-		
-		JButton btnNewButton = new JButton("在线缴费");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new pay();
-				
-			}
-		});
-		btnNewButton.setBounds(415, 160, 93, 23);
-		contentPane.add(btnNewButton);
-		
-		JButton btnNewButton_1 = new JButton("查询");
-		btnNewButton_1.setBounds(344, 293, 93, 23);
-		contentPane.add(btnNewButton_1);
-		
+		JLabel nnamelabel = new JLabel("责任护士");
+		nnamelabel.setBounds(190, 68, 57, 15);
+		contentPane.add(nnamelabel);
+
+		JLabel curelabel = new JLabel("治疗方案");
+		curelabel.setBounds(34, 145, 57, 15);
+		contentPane.add(curelabel);
+
+		JLabel idlabel = new JLabel("身份证");
+		idlabel.setBounds(93, 297, 48, 15);
+		contentPane.add(idlabel);
+
 		JLabel lblNewLabel_4 = new JLabel("病房信息");
 		lblNewLabel_4.setBounds(373, 68, 64, 15);
 		contentPane.add(lblNewLabel_4);
+
+		JButton btnNewButton = new JButton("在线缴费");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//todo 缴费系统
+				if (pno.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "请输入身份证号", "提示信息", JOptionPane.WARNING_MESSAGE);
+				} else {
+					String patientno = pno.getText();// 获取文本值
+					padao.Balance_payment(pname, surplus, sickroom, pno, patientno);
+					new pay();
+				}
+
+			}
+		});
+		btnNewButton.setBounds(448, 203, 93, 23);
+		contentPane.add(btnNewButton);
 		
-		textField = new JTextField();
-		textField.setBounds(93, 18, 66, 21);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		JButton btnNewButton_1 = new JButton("查询");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				// 进行输入框判断，为空则不进行登录操作。
+				if (pno.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "请输入身份证号", "提示信息", JOptionPane.WARNING_MESSAGE);
+				} else {
+					String patientno = pno.getText();// 获取文本值
+					padao.seepatient(pname, page, surplus, dname_p, nname_p,sickroom,cure, patientno);
+				}
+			}
+		});
+		btnNewButton_1.setBounds(344, 293, 93, 23);
+		contentPane.add(btnNewButton_1);
+
+		pname = new JTextField();
+		pname.setBounds(93, 18, 66, 21);
+		contentPane.add(pname);
+		pname.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(93, 65, 66, 21);
-		contentPane.add(textField_1);
+		dname_p = new JTextField();
+		dname_p.setColumns(10);
+		dname_p.setBounds(93, 65, 66, 21);
+		contentPane.add(dname_p);
 		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		textField_2.setBounds(259, 18, 66, 21);
-		contentPane.add(textField_2);
+		page = new JTextField();
+		page.setColumns(10);
+		page.setBounds(259, 18, 66, 21);
+		contentPane.add(page);
 		
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
-		textField_3.setBounds(257, 65, 66, 21);
-		contentPane.add(textField_3);
+		nname_p = new JTextField();
+		nname_p.setColumns(10);
+		nname_p.setBounds(257, 65, 66, 21);
+		contentPane.add(nname_p);
 		
-		textField_4 = new JTextField();
-		textField_4.setColumns(10);
-		textField_4.setBounds(442, 18, 66, 21);
-		contentPane.add(textField_4);
+		surplus = new JTextField();
+		surplus.setColumns(10);
+		surplus.setBounds(442, 18, 99, 21);
+		contentPane.add(surplus);
 		
-		textField_5 = new JTextField();
-		textField_5.setColumns(10);
-		textField_5.setBounds(442, 65, 66, 21);
-		contentPane.add(textField_5);
+		sickroom = new JTextField();
+		sickroom.setColumns(10);
+		sickroom.setBounds(442, 65, 99, 21);
+		contentPane.add(sickroom);
 		
-		JTextArea textArea = new JTextArea();
-		textArea.setBounds(93, 140, 252, 145);
-		contentPane.add(textArea);
-		
-		JLabel lblNewLabel_3_2 = new JLabel("治疗方案");
-		lblNewLabel_3_2.setBounds(34, 145, 57, 15);
-		contentPane.add(lblNewLabel_3_2);
-		
-		JLabel lblNewLabel_5 = new JLabel("身份证");
-		lblNewLabel_5.setBounds(93, 297, 48, 15);
-		contentPane.add(lblNewLabel_5);
-		
-		textField_6 = new JTextField();
-		textField_6.setColumns(10);
-		textField_6.setBounds(151, 294, 130, 21);
-		contentPane.add(textField_6);
+		cure = new JTextArea();
+		cure.setBounds(93, 140, 252, 145);
+		contentPane.add(cure);
+
+
+		pno = new JTextField();
+		pno.setColumns(10);
+		pno.setBounds(151, 294, 130, 21);
+		contentPane.add(pno);
 	}
+
+
 }

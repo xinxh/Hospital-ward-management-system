@@ -1,33 +1,45 @@
 package view;
 
-import java.awt.EventQueue;
+import dao.Doctordao;
+import dao.NurseDao;
+import dao.Patientdao;
+import dao.Sickroomdao;
+import javabean.Doctor;
+import javabean.Office;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 public class Add extends JFrame {
 
+	private JComboBox oname_d;
+	private JComboBox nsex;
+	private JComboBox nono;
+	private JComboBox ono_d;
+	private JComboBox dsex;
 	private JPanel contentPane;
 	private static String text;
-	private JTextField textField_10;
+	private JTextField nname_p;
 	private JTextField textField_12;
-	private JTextField textField_5;
-	private JTextField textField_6;
-	private JTextField textField_7;
-	private JTextField textField_8;
-	private JTextField textField_9;
-	private JTextField textField_11;
-	private JTextField textField_13;
-	private JTextField textField_14;
-	private JTextField textField_15;
-	private JTextField textField_16;
-	private JTextField textField_17;
-	private JTextField textField_18;
+	private JTextField dname;
+	private JTextField dno;
+	private JTextField dage;
+	private JTextField career_d;
+	private JTextField contact_d;
+	private JTextField nname;
+	private JTextField nno;
+	private JTextField nage;
+	private JTextField ncareer;
+	private JTextField ncontact;
+	private JTextField mno;
+	private JTextField mname;
+	private JComboBox bname;
+	private JComboBox status;
+	private JTextField mno_p;
 
 	/**
 	 * Launch the application.
@@ -54,7 +66,8 @@ public class Add extends JFrame {
 
 	public Add() {
 		this(text);
-
+		Sickroomdao sk = new Sickroomdao();
+		Doctordao dc = new Doctordao();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setVisible(true);
 		setBounds(100, 100, 598, 401);
@@ -62,78 +75,127 @@ public class Add extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		String[] department = new String[] { "内科", "外科", "妇科", "儿科", "辅助检查科室", "精神科", "五官科", "肛肠科" };
 
-		// 医生
-		JPanel adddoctor = new JPanel();
-		adddoctor.setBounds(0, 0, 581, 361);
-		contentPane.add(adddoctor);
-		adddoctor.setLayout(null);
-		adddoctor.setVisible(false);
+		// 病人
+		JPanel addpatient = new JPanel();
+		addpatient.setBounds(0, 0, 581, 361);
+		contentPane.add(addpatient);
+		addpatient.setLayout(null);
+		addpatient.setVisible(false);
+		JLabel pnamelabel = new JLabel("姓名");
+		pnamelabel.setBounds(357, 27, 40, 15);
+		addpatient.add(pnamelabel);
 
-		JLabel lblNewLabel_5 = new JLabel("姓名");
-		lblNewLabel_5.setBounds(363, 39, 40, 15);
-		adddoctor.add(lblNewLabel_5);
+		JLabel pnolabel = new JLabel("病人身份证");
+		pnolabel.setBounds(63, 27, 75, 15);
+		addpatient.add(pnolabel);
 
-		JLabel lblNewLabel_1_2 = new JLabel("医生编号");
-		lblNewLabel_1_2.setBounds(69, 39, 75, 15);
-		adddoctor.add(lblNewLabel_1_2);
+		JLabel pagelabel = new JLabel("年龄");
+		pagelabel.setBounds(357, 85, 40, 15);
+		addpatient.add(pagelabel);
 
-		JLabel lblNewLabel_2_1 = new JLabel("年龄");
-		lblNewLabel_2_1.setBounds(363, 91, 40, 15);
-		adddoctor.add(lblNewLabel_2_1);
+		JLabel psexlabel = new JLabel("性别");
+		psexlabel.setBounds(63, 85, 40, 15);
+		addpatient.add(psexlabel);
 
-		JLabel lblNewLabel_3_1 = new JLabel("性别");
-		lblNewLabel_3_1.setBounds(69, 97, 40, 15);
-		adddoctor.add(lblNewLabel_3_1);
+		JLabel lblNewLabel_4 = new JLabel("患病");
+		lblNewLabel_4.setBounds(63, 151, 40, 15);
+		addpatient.add(lblNewLabel_4);
 
-		JLabel lblNewLabel_4_2 = new JLabel("科室");
-		lblNewLabel_4_2.setBounds(69, 163, 40, 15);
-		adddoctor.add(lblNewLabel_4_2);
+		JLabel dnamelabel_p = new JLabel("主治医生");
+		dnamelabel_p.setBounds(357, 151, 59, 15);
+		addpatient.add(dnamelabel_p);
 
-		JLabel lblNewLabel_4_1_1 = new JLabel("职称");
-		lblNewLabel_4_1_1.setBounds(363, 163, 50, 15);
-		adddoctor.add(lblNewLabel_4_1_1);
+		JLabel nname_plabel = new JLabel("责任护士");
+		nname_plabel.setBounds(357, 210, 59, 15);
+		addpatient.add(nname_plabel);
 
-		JLabel lblNewLabel_1_1_1 = new JLabel("联系方式");
-		lblNewLabel_1_1_1.setBounds(69, 222, 59, 15);
-		adddoctor.add(lblNewLabel_1_1_1);
+		JTextField pname = new JTextField();
+		pname.setBounds(426, 24, 66, 21);
+		pname.setColumns(10);
+		addpatient.add(pname);
 
-		textField_5 = new JTextField();
-		textField_5.setColumns(10);
-		textField_5.setBounds(432, 36, 66, 21);
-		adddoctor.add(textField_5);
+		JTextField pno = new JTextField();
+		pno.setBounds(131, 24, 106, 21);
+		pno.setColumns(10);
+		addpatient.add(pno);
 
-		textField_6 = new JTextField();
-		textField_6.setColumns(10);
-		textField_6.setBounds(137, 36, 106, 21);
-		adddoctor.add(textField_6);
+		JTextField page = new JTextField();
+		page.setBounds(426, 82, 66, 21);
+		page.setColumns(10);
+		addpatient.add(page);
 
-		textField_7 = new JTextField();
-		textField_7.setColumns(10);
-		textField_7.setBounds(432, 88, 66, 21);
-		adddoctor.add(textField_7);
+		JTextField dname_p = new JTextField();
+		dname_p.setBounds(426, 148, 66, 21);
+		dname_p.setColumns(10);
+		addpatient.add(dname_p);
 
-		textField_8 = new JTextField();
-		textField_8.setColumns(10);
-		textField_8.setBounds(432, 160, 66, 21);
-		adddoctor.add(textField_8);
+		nname_p = new JTextField();
+		nname_p.setColumns(10);
+		nname_p.setBounds(426, 207, 66, 21);
+		addpatient.add(nname_p);
 
-		textField_9 = new JTextField();
-		textField_9.setColumns(10);
-		textField_9.setBounds(137, 219, 106, 21);
-		adddoctor.add(textField_9);
+		JTextField cure = new JTextField();
+		cure.setColumns(10);
+		cure.setBounds(131, 148, 66, 21);
+		addpatient.add(cure);
 
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(137, 87, 66, 23);
-		adddoctor.add(comboBox_1);
+		JComboBox psex = new JComboBox();
+		psex.setBounds(131, 81, 66, 23);
+		addpatient.add(psex);
+		psex.addItem("男");
+		psex.addItem("女");
 
-		JComboBox comboBox_1_1 = new JComboBox();
-		comboBox_1_1.setBounds(137, 159, 66, 23);
-		adddoctor.add(comboBox_1_1);
+		JButton 确认添加_p = new JButton("确认");
+		确认添加_p.setBounds(236, 313, 93, 23);
+		addpatient.add(确认添加_p);
 
-		JButton btnNewButton_1 = new JButton("确认");
-		btnNewButton_1.setBounds(244, 287, 93, 23);
-		adddoctor.add(btnNewButton_1);
+		JLabel room_p = new JLabel("房间号");
+		room_p.setBounds(63, 207, 40, 15);
+		addpatient.add(room_p);
+
+		mno_p = new JTextField();
+		mno_p.setColumns(10);
+		mno_p.setBounds(131, 204, 66, 21);
+		addpatient.add(mno_p);
+
+		JLabel bed_p_1 = new JLabel("病床号");
+		bed_p_1.setBounds(63, 263, 40, 15);
+		addpatient.add(bed_p_1);
+
+		JComboBox bed_p = new JComboBox();
+		bed_p.setBounds(132, 259, 66, 23);
+		addpatient.add(bed_p);
+		bed_p.addItem("1");
+		bed_p.addItem("2");
+		bed_p.addItem("3");
+		bed_p.addItem("4");
+
+		确认添加_p.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// 进行输入框判断，为空则不进行登录操作。
+				if (pno.getText().isEmpty() || pname.getText().isEmpty() || page.getText().isEmpty()
+						|| nname_p.getText().isEmpty() || dname_p.getText().isEmpty() || cure.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "输入的信息有误", "提示信息", JOptionPane.WARNING_MESSAGE);
+				} else {
+					String addpno = pno.getText();// 获取文本值
+					String addpname = pname.getText();// 获取文本值
+					String addpage = page.getText();// 获取文本值
+					String addnname = nname_p.getText();// 获取文本值
+					String adddname = dname_p.getText();// 获取文本值
+					String adddcure = cure.getText();// 获取文本值
+					String addmno = mno_p.getText();// 获取文本值
+					String addpsex = psex.getSelectedItem().toString();// 获取文本值
+					String addbed = bed_p.getSelectedItem().toString();// 获取文本值
+
+					Patientdao pad = new Patientdao();
+					pad.PatientInsert(addpno, addpname, addpage, addnname, adddname,  adddcure, addpsex,
+							addmno, addbed);
+				}
+			}
+		});
 
 		// 护士
 		JPanel addnurse = new JPanel();
@@ -142,207 +204,295 @@ public class Add extends JFrame {
 		addnurse.setLayout(null);
 		addnurse.setVisible(false);
 
-		JLabel lblNewLabel_5_1 = new JLabel("姓名");
-		lblNewLabel_5_1.setBounds(363, 39, 40, 15);
-		addnurse.add(lblNewLabel_5_1);
+		JLabel nnamelabel = new JLabel("姓名");
+		nnamelabel.setBounds(363, 39, 40, 15);
+		addnurse.add(nnamelabel);
 
-		JLabel lblNewLabel_1_2_1 = new JLabel("护士编号");
-		lblNewLabel_1_2_1.setBounds(69, 39, 75, 15);
-		addnurse.add(lblNewLabel_1_2_1);
+		JLabel nnolabel = new JLabel("护士编号");
+		nnolabel.setBounds(69, 39, 75, 15);
+		addnurse.add(nnolabel);
 
-		JLabel lblNewLabel_2_1_1 = new JLabel("年龄");
-		lblNewLabel_2_1_1.setBounds(363, 91, 40, 15);
-		addnurse.add(lblNewLabel_2_1_1);
+		JLabel nagelabel = new JLabel("年龄");
+		nagelabel.setBounds(363, 97, 40, 15);
+		addnurse.add(nagelabel);
 
-		JLabel lblNewLabel_3_1_1 = new JLabel("性别");
-		lblNewLabel_3_1_1.setBounds(69, 97, 40, 15);
-		addnurse.add(lblNewLabel_3_1_1);
+		JLabel nsexlabel = new JLabel("性别");
+		nsexlabel.setBounds(69, 97, 40, 15);
+		addnurse.add(nsexlabel);
 
-		JLabel lblNewLabel_4_2_1 = new JLabel("科室");
-		lblNewLabel_4_2_1.setBounds(69, 163, 40, 15);
-		addnurse.add(lblNewLabel_4_2_1);
+		JLabel sickroomlabel = new JLabel("病房号");
+		sickroomlabel.setBounds(69, 163, 40, 15);
+		addnurse.add(sickroomlabel);
 
-		JLabel lblNewLabel_4_1_1_1 = new JLabel("职称");
-		lblNewLabel_4_1_1_1.setBounds(363, 163, 50, 15);
-		addnurse.add(lblNewLabel_4_1_1_1);
+		JLabel ncareerlabel = new JLabel("职称");
+		ncareerlabel.setBounds(363, 163, 50, 15);
+		addnurse.add(ncareerlabel);
 
-		JLabel lblNewLabel_1_1_1_1 = new JLabel("联系方式");
-		lblNewLabel_1_1_1_1.setBounds(69, 222, 59, 15);
-		addnurse.add(lblNewLabel_1_1_1_1);
+		JLabel ncontactlabel = new JLabel("联系方式");
+		ncontactlabel.setBounds(69, 222, 59, 15);
+		addnurse.add(ncontactlabel);
 
-		textField_11 = new JTextField();
-		textField_11.setColumns(10);
-		textField_11.setBounds(432, 36, 66, 21);
-		addnurse.add(textField_11);
+		nname = new JTextField();
+		nname.setColumns(10);
+		nname.setBounds(432, 36, 66, 21);
+		addnurse.add(nname);
 
-		textField_13 = new JTextField();
-		textField_13.setColumns(10);
-		textField_13.setBounds(137, 36, 106, 21);
-		addnurse.add(textField_13);
+		nno = new JTextField();
+		nno.setColumns(10);
+		nno.setBounds(137, 36, 106, 21);
+		addnurse.add(nno);
 
-		textField_14 = new JTextField();
-		textField_14.setColumns(10);
-		textField_14.setBounds(432, 88, 66, 21);
-		addnurse.add(textField_14);
+		nage = new JTextField();
+		nage.setColumns(10);
+		nage.setBounds(432, 95, 66, 21);
+		addnurse.add(nage);
 
-		textField_15 = new JTextField();
-		textField_15.setColumns(10);
-		textField_15.setBounds(432, 160, 66, 21);
-		addnurse.add(textField_15);
+		ncareer = new JTextField();
+		ncareer.setColumns(10);
+		ncareer.setBounds(432, 160, 66, 21);
+		addnurse.add(ncareer);
 
-		textField_16 = new JTextField();
-		textField_16.setColumns(10);
-		textField_16.setBounds(137, 219, 106, 21);
-		addnurse.add(textField_16);
+		ncontact = new JTextField();
+		ncontact.setColumns(10);
+		ncontact.setBounds(137, 219, 106, 21);
+		addnurse.add(ncontact);
 
-		JComboBox comboBox_1_1_1 = new JComboBox();
-		comboBox_1_1_1.setBounds(137, 159, 66, 23);
-		addnurse.add(comboBox_1_1_1);
+		JTextField mno_n = new JTextField();
+		mno_n.setBounds(137, 159, 66, 23);
+		addnurse.add(mno_n);
 
-		JComboBox comboBox_1_2 = new JComboBox();
-		comboBox_1_2.setBounds(137, 87, 66, 23);
-		addnurse.add(comboBox_1_2);
+		nsex = new JComboBox();
+		nsex.setBounds(137, 93, 66, 23);
+		addnurse.add(nsex);
+		nsex.addItem("男");
+		nsex.addItem("女");
 
-		JButton btnNewButton_1_1 = new JButton("确认");
-		btnNewButton_1_1.setBounds(244, 287, 93, 23);
-		addnurse.add(btnNewButton_1_1);
+		JButton n确认添加 = new JButton("确认");
+		n确认添加.setBounds(244, 287, 93, 23);
+		addnurse.add(n确认添加);
+		n确认添加.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// 进行输入框判断，为空则不进行登录操作。
+				if (nno.getText().isEmpty() || nname.getText().isEmpty() || nage.getText().isEmpty()
+						|| ncareer.getText().isEmpty() || mno_n.getText().isEmpty() || ncontact.getText().isEmpty() || nsex.getSelectedItem().toString().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "输入的信息有误", "提示信息", JOptionPane.WARNING_MESSAGE);
+				} else {
+					String addnno = nno.getText();// 获取文本值
+					String addnname = nname.getText();// 获取文本值
+					String addnage = nage.getText();// 获取文本值
+					String addncareer = ncareer.getText();// 获取文本值
+					String adddmno_n = mno_n.getText();// 获取文本值
+					String addncontact = ncontact.getText();// 获取文本值
+					String addnsex = nsex.getSelectedItem().toString();// 获取文本值
 
-		// 病人
-		JPanel addpatient = new JPanel();
-		addpatient.setBounds(0, 0, 581, 361);
-		contentPane.add(addpatient);
-		addpatient.setLayout(null);
-		addpatient.setVisible(false);
+					NurseDao nd = new NurseDao();
+					nd.NurseInsert(addnno, addnname, addnage, addncareer, adddmno_n,  addncontact, addnsex);
 
-		JLabel lblNewLabel = new JLabel("姓名");
-		lblNewLabel.setBounds(357, 27, 40, 15);
-		addpatient.add(lblNewLabel);
-
-		JLabel lblNewLabel_1 = new JLabel("病人身份证");
-		lblNewLabel_1.setBounds(63, 27, 75, 15);
-		addpatient.add(lblNewLabel_1);
-
-		JLabel lblNewLabel_2 = new JLabel("年龄");
-		lblNewLabel_2.setBounds(357, 79, 40, 15);
-		addpatient.add(lblNewLabel_2);
-
-		JLabel lblNewLabel_3 = new JLabel("性别");
-		lblNewLabel_3.setBounds(63, 85, 40, 15);
-		addpatient.add(lblNewLabel_3);
-
-		JLabel lblNewLabel_4 = new JLabel("患病");
-		lblNewLabel_4.setBounds(63, 151, 40, 15);
-		addpatient.add(lblNewLabel_4);
-
-		JLabel lblNewLabel_4_1 = new JLabel("主治医生");
-		lblNewLabel_4_1.setBounds(357, 151, 59, 15);
-		addpatient.add(lblNewLabel_4_1);
-
-		JLabel lblNewLabel_1_1 = new JLabel("联系方式");
-		lblNewLabel_1_1.setBounds(63, 210, 59, 15);
-		addpatient.add(lblNewLabel_1_1);
-
-		JLabel lblNewLabel_4_1_2 = new JLabel("责任护士");
-		lblNewLabel_4_1_2.setBounds(357, 210, 59, 15);
-		addpatient.add(lblNewLabel_4_1_2);
-
-		JTextField textField = new JTextField();
-		textField.setBounds(426, 24, 66, 21);
-		textField.setColumns(10);
-		addpatient.add(textField);
-
-		JTextField textField_4 = new JTextField();
-		textField_4.setBounds(131, 207, 106, 21);
-		textField_4.setColumns(10);
-		addpatient.add(textField_4);
-
-		JTextField textField_1 = new JTextField();
-		textField_1.setBounds(131, 24, 106, 21);
-		textField_1.setColumns(10);
-		addpatient.add(textField_1);
-
-		JTextField textField_2 = new JTextField();
-		textField_2.setBounds(426, 76, 66, 21);
-		textField_2.setColumns(10);
-		addpatient.add(textField_2);
-
-		JTextField textField_3 = new JTextField();
-		textField_3.setBounds(426, 148, 66, 21);
-		textField_3.setColumns(10);
-		addpatient.add(textField_3);
-
-		textField_10 = new JTextField();
-		textField_10.setColumns(10);
-		textField_10.setBounds(426, 207, 66, 21);
-		addpatient.add(textField_10);
-
-		textField_12 = new JTextField();
-		textField_12.setColumns(10);
-		textField_12.setBounds(131, 148, 66, 21);
-		addpatient.add(textField_12);
-
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(131, 75, 66, 23);
-		addpatient.add(comboBox);
-
-		JButton btnNewButton = new JButton("确认");
-		btnNewButton.setBounds(238, 275, 93, 23);
-		addpatient.add(btnNewButton);
-		
-		// 病房病床
-				JPanel addsickroom = new JPanel();
-				contentPane.add(addsickroom);
-				addsickroom.setBounds(0, 0, 581, 361);
-				addsickroom.setLayout(null);
-				addpatient.setVisible(false);
-
-				JLabel lblNewLabel_5_2 = new JLabel("输入病房号");
-				lblNewLabel_5_2.setBounds(184, 67, 71, 15);
-				addsickroom.add(lblNewLabel_5_2);
-
-				JLabel lblNewLabel_2_1_2 = new JLabel("输入病床号");
-				lblNewLabel_2_1_2.setBounds(184, 160, 71, 15);
-				addsickroom.add(lblNewLabel_2_1_2);
-
-				textField_17 = new JTextField();
-				textField_17.setColumns(10);
-				textField_17.setBounds(289, 64, 66, 21);
-				addsickroom.add(textField_17);
-
-				JButton btnNewButton_1_2 = new JButton("确认");
-				btnNewButton_1_2.setBounds(234, 283, 93, 23);
-				addsickroom.add(btnNewButton_1_2);
-
-				textField_18 = new JTextField();
-				textField_18.setColumns(10);
-				textField_18.setBounds(289, 157, 66, 21);
-				addsickroom.add(textField_18);
-
-		
-		
-		// 选择跳转的功能
-				if (text.equals("patient")) {
-					adddoctor.setVisible(false);
-					addsickroom.setVisible(false);
-					addnurse.setVisible(false);
-					addpatient.setVisible(true);
-				} else if (text.equals("doctor")) {
-					addsickroom.setVisible(false);
-					addnurse.setVisible(false);
-					addpatient.setVisible(false);
-					adddoctor.setVisible(true);
-				} else if (text.equals("sickroom")) {
-					addnurse.setVisible(false);
-					addpatient.setVisible(false);
-					adddoctor.setVisible(false);
-					addsickroom.setVisible(true);
-				} else if (text.equals("nurse")) {
-					addsickroom.setVisible(false);
-					addpatient.setVisible(false);
-					adddoctor.setVisible(false);
-					addnurse.setVisible(true);
 				}
+			}
+		});
+
+		// 医生
+		JPanel adddoctor = new JPanel();
+		adddoctor.setBounds(0, 0, 581, 361);
+		contentPane.add(adddoctor);
+		adddoctor.setLayout(null);
+		adddoctor.setVisible(false);
+
+		JLabel dnamelabel = new JLabel("姓名");
+		dnamelabel.setBounds(363, 39, 40, 15);
+		adddoctor.add(dnamelabel);
+
+		JLabel dnolabel = new JLabel("医生编号");
+		dnolabel.setBounds(69, 39, 75, 15);
+		adddoctor.add(dnolabel);
+
+		JLabel dagelabel = new JLabel("年龄");
+		dagelabel.setBounds(363, 97, 40, 15);
+		adddoctor.add(dagelabel);
+
+		JLabel dsexlabel = new JLabel("性别");
+		dsexlabel.setBounds(69, 97, 40, 15);
+		adddoctor.add(dsexlabel);
+
+		JLabel onolabel = new JLabel("科室");
+		onolabel.setBounds(69, 163, 40, 15);
+		adddoctor.add(onolabel);
+
+		JLabel careerlabel = new JLabel("职称");
+		careerlabel.setBounds(363, 163, 50, 15);
+		adddoctor.add(careerlabel);
+
+		JLabel contactlabel = new JLabel("联系方式");
+		contactlabel.setBounds(69, 222, 59, 15);
+		adddoctor.add(contactlabel);
+
+		dname = new JTextField();
+		dname.setColumns(10);
+		dname.setBounds(413, 36, 85, 21);
+		adddoctor.add(dname);
+
+		dno = new JTextField();
+		dno.setColumns(10);
+		dno.setBounds(137, 36, 106, 21);
+		adddoctor.add(dno);
+
+		dage = new JTextField();
+		dage.setColumns(10);
+		dage.setBounds(413, 95, 85, 21);
+		adddoctor.add(dage);
+
+		career_d = new JTextField();
+		career_d.setColumns(10);
+		career_d.setBounds(411, 160, 87, 21);
+		adddoctor.add(career_d);
+
+		contact_d = new JTextField();
+		contact_d.setColumns(10);
+		contact_d.setBounds(137, 219, 106, 21);
+		adddoctor.add(contact_d);
+
+		dsex = new JComboBox();
+		dsex.setBounds(137, 93, 66, 23);
+		adddoctor.add(dsex);
+		dsex.addItem("男");
+		dsex.addItem("女");
+
+		oname_d = new JComboBox();
+		oname_d.setBounds(137, 159, 66, 23);
+		adddoctor.add(oname_d);
+		for (int i = 0; i < department.length; i++) {
+			oname_d.addItem(department[i]);
+		}
+
+		JButton 确认添加 = new JButton("确认");
+		确认添加.setBounds(244, 287, 93, 23);
+		adddoctor.add(确认添加);
+		确认添加.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// 进行输入框判断，为空则不进行登录操作。
+				// todo 医生添加
+				if (dno.getText().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "请输入的编号输入有误", "提示信息", JOptionPane.WARNING_MESSAGE);
+				} else {
+					Doctor doctor = new Doctor();
+					doctor.setDno(String.valueOf(dno.getText()));
+					doctor.setDname(String.valueOf(dname.getText()));
+					doctor.setDage(String.valueOf(dage.getText()));
+					doctor.setCareer(String.valueOf(career_d.getText()));
+					doctor.setDsex(String.valueOf(dsex.getSelectedItem()));
+					doctor.setContact(String.valueOf(contact_d.getText()));
+
+					Office office = new Office();
+					office.setOname(String.valueOf(oname_d.getSelectedItem()));
+
+//					Mark mark = new Mark();
+					dc.DoctorInsert(doctor,office);
+				}
+			}
+		});
+
+		// 病房病床
+		JPanel addsickroom = new JPanel();
+		contentPane.add(addsickroom);
+		addsickroom.setBounds(0, 0, 581, 361);
+		addsickroom.setLayout(null);
+
+		JLabel mmolabel = new JLabel("输入病房编号");
+		mmolabel.setBounds(104, 86, 93, 15);
+		addsickroom.add(mmolabel);
+
+		JLabel bnolabel = new JLabel("输入病床编号");
+		bnolabel.setBounds(104, 178, 93, 15);
+		addsickroom.add(bnolabel);
+
+		JLabel 分配状态 = new JLabel("状态");
+		分配状态.setBounds(298, 178, 47, 15);
+		addsickroom.add(分配状态);
+
+		JLabel mmolabel_1 = new JLabel("输入病房号");
+		mmolabel_1.setBounds(298, 83, 71, 15);
+		addsickroom.add(mmolabel_1);
+
+		mno = new JTextField();
+		mno.setColumns(10);
+		mno.setBounds(200, 83, 66, 21);
+		addsickroom.add(mno);
+
+		mname = new JTextField();
+		mname.setColumns(10);
+		mname.setBounds(372, 80, 66, 21);
+		addsickroom.add(mname);
+
+		bname = new JComboBox();
+		bname.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		bname.setBounds(207, 174, 66, 23);
+		addsickroom.add(bname);
+		bname.addItem("1");
+		bname.addItem("2");
+		bname.addItem("3");
+		bname.addItem("4");
+
+		status = new JComboBox();
+		status.setBounds(372, 174, 66, 23);
+		addsickroom.add(status);
+		status.addItem("未分配");
+		status.addItem("已分配");
+
+		JButton 确认添加_sickroom = new JButton("确认");
+		确认添加_sickroom.setBounds(234, 283, 93, 23);
+		addsickroom.add(确认添加_sickroom);
+
+		确认添加_sickroom.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// 进行输入框判断，为空则不进行登录操作。
+				// 病房病床添加
+				if (mno.getText().isEmpty() || mname.getText().isEmpty()
+						|| bname.getSelectedItem().toString().isEmpty()) {
+					JOptionPane.showMessageDialog(null, "请输入的房号或床号输入有误", "提示信息", JOptionPane.WARNING_MESSAGE);
+				} else {
+					String addmno = mno.getText();// 获取文本值
+					String addmname = mname.getText();// 获取文本值
+					String addbname = bname.getSelectedItem().toString();// 获取文本值
+					String addstatus = status.getSelectedItem().toString();// 获取文本值
+					sk.SickroomInsert(addmno, addmname, addbname, addstatus);
+				}
+			}
+		});
+
+		// 选择跳转的功能
+		switch (text) {
+		case "patient" -> {
+			adddoctor.setVisible(false);
+			addsickroom.setVisible(false);
+			addnurse.setVisible(false);
+			addpatient.setVisible(true);
+		}
+		case "doctor" -> {
+			addsickroom.setVisible(false);
+			addnurse.setVisible(false);
+			addpatient.setVisible(false);
+			adddoctor.setVisible(true);
+		}
+		case "sickroom" -> {
+			addnurse.setVisible(false);
+			addpatient.setVisible(false);
+			adddoctor.setVisible(false);
+			addsickroom.setVisible(true);
+		}
+		case "nurse" -> {
+			addsickroom.setVisible(false);
+			addpatient.setVisible(false);
+			adddoctor.setVisible(false);
+			addnurse.setVisible(true);
+		}
+		}
 
 	}
-
 }

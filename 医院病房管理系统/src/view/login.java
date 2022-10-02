@@ -3,24 +3,17 @@ package view;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.util.Scanner;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import containt.containt;
-import dao.logindao;
+import dao.Logindao;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JCheckBox;
 import javax.swing.JPasswordField;
 
 public class login extends JFrame {
@@ -81,7 +74,7 @@ public class login extends JFrame {
 
 				String uname = username.getText();
 				String pawd = password.getText();
-				logindao ld = new logindao();
+				Logindao ld = new Logindao();
 
 				if (ld.userlogin(uname, pawd)) {
 					//后期删除
