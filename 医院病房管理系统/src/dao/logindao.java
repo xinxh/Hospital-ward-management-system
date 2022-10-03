@@ -37,16 +37,13 @@ public class Logindao {
 			ResultSet rs=ps.executeQuery();
 			if(rs.next()) {
 				//后期删除
-				JOptionPane.showMessageDialog(null, "数据库链接成功", "提示信息", JOptionPane.WARNING_MESSAGE);
 				return true;
 			}else {
 				//后期删除
-				JOptionPane.showMessageDialog(null, "数据库链接成功", "提示信息", JOptionPane.WARNING_MESSAGE);
 				return false;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-				//后期删除
 			JOptionPane.showMessageDialog(null, "数据库链接失败", "提示信息", JOptionPane.WARNING_MESSAGE);
 			return false;
 		}

@@ -1,6 +1,7 @@
 package dao;
 
 import containt.containt;
+import javabean.SickRoom;
 
 import javax.swing.*;
 import java.sql.Connection;
@@ -26,34 +27,28 @@ public class Sickroomdao {
     }
 
 //病房添加
-    public void SickroomInsert(String addmno, String addmname, String addbno, String addstatus) {
+public void SickroomInsert(SickRoom sickRoom){
         PreparedStatement ps;
         PreparedStatement ps1;
         try {
-            ps = conn.prepareStatement("insert into mark(Mno,Mname) values(?,?)");
-            ps.setString(1, addmno);
-            ps.setString(2, addmname);
-            System.out.println(addmno);
-            System.out.println(addmname);
-            ps1 = conn.prepareStatement("insert into bed(Bno,Mno,Status) values(?,?,?)");
-            String bno = addmno+ "-" + addbno;
-            ps1.setString(1, bno);
-            ps1.setString(2, addmno);
-            ps1.setString(3, addstatus);
+            ps = conn.prepareStatement("insert ignore into mark(Mno,Mname) values(?,?)");
+            ps.setString(1, sickRoom.getMno());
+            ps.setString(2, sickRoom.getMname());
             ps.execute();
+            ps1 = conn.prepareStatement("insert into bed(Bno,Mno,Status) values(?,?,?)");
+            String bno = sickRoom.getMno()+ "-" + sickRoom.getNno();
+            ps1.setString(1, bno);
+            ps1.setString(2, sickRoom.getMno());
+            ps1.setString(3, sickRoom.getStatus());
             ps1.execute();
             JOptionPane.showMessageDialog(null, "插入成功", "提示信息", JOptionPane.WARNING_MESSAGE);
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "插入失败", "提示信息", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, ",请检查后重试", "提示信息", JOptionPane.WARNING_MESSAGE);
         }
     }
-
     
-    
-    
-    
-   //病床表格
+//病床表格
     public void show(Object info[][]) {
     	 try {
 			PreparedStatement ps=conn.prepareStatement("select * from bed");
@@ -70,7 +65,6 @@ public class Sickroomdao {
 			e.printStackTrace();
 		}
     }
-    
-    
-    
+
+
 }

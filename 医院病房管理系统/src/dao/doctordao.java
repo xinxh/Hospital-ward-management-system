@@ -30,18 +30,11 @@ public class Doctordao {
 	public void seedoctor(JTextField dname, JTextField dage, JTextField career, String dno) {
 		PreparedStatement ps;
 		try {
-			if(conn==null) {
-				JOptionPane.showMessageDialog(null, "数据库链接失败!", "提示信息", JOptionPane.WARNING_MESSAGE);
-			}else {
-				JOptionPane.showMessageDialog(null, "数据库链接成功", "提示信息", JOptionPane.WARNING_MESSAGE);
-			}
-
 			ps = conn.prepareStatement("select * from doctor where dno=?");
 			ps.setString(1, dno);
 			ResultSet rs = ps.executeQuery();
 
 			if (rs.next()==true) {
-				JOptionPane.showMessageDialog(null, "有这个人", "提示信息", JOptionPane.WARNING_MESSAGE);
 				dname.setText(rs.getString("Dname"));
 				dage.setText(rs.getString("Dage"));
 				career.setText(rs.getString("Career"));
@@ -75,7 +68,7 @@ public class Doctordao {
 			JOptionPane.showMessageDialog(null, "插入成功", "提示信息", JOptionPane.WARNING_MESSAGE);
 		} catch (SQLException e) {
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "插入失败", "提示信息", JOptionPane.WARNING_MESSAGE);
+			JOptionPane.showMessageDialog(null, "插入失败,请检查后重试", "提示信息", JOptionPane.WARNING_MESSAGE);
 		}
 	}
 

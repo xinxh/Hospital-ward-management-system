@@ -88,7 +88,6 @@ public class patient extends JFrame {
 		JButton btnNewButton = new JButton("在线缴费");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//todo 缴费系统
 				if (pno.getText().isEmpty()) {
 					JOptionPane.showMessageDialog(null, "请输入身份证号", "提示信息", JOptionPane.WARNING_MESSAGE);
 				} else {

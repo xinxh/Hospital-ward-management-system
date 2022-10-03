@@ -6,6 +6,7 @@ import dao.Patientdao;
 import dao.Sickroomdao;
 import javabean.Doctor;
 import javabean.Office;
+import javabean.SickRoom;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
@@ -372,8 +373,6 @@ public class Add extends JFrame {
 		确认添加.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// 进行输入框判断，为空则不进行登录操作。
-				// todo 医生添加
 				if (dno.getText().isEmpty()) {
 					JOptionPane.showMessageDialog(null, "请输入的编号输入有误", "提示信息", JOptionPane.WARNING_MESSAGE);
 				} else {
@@ -457,11 +456,12 @@ public class Add extends JFrame {
 						|| bname.getSelectedItem().toString().isEmpty()) {
 					JOptionPane.showMessageDialog(null, "请输入的房号或床号输入有误", "提示信息", JOptionPane.WARNING_MESSAGE);
 				} else {
-					String addmno = mno.getText();// 获取文本值
-					String addmname = mname.getText();// 获取文本值
-					String addbname = bname.getSelectedItem().toString();// 获取文本值
-					String addstatus = status.getSelectedItem().toString();// 获取文本值
-					sk.SickroomInsert(addmno, addmname, addbname, addstatus);
+					SickRoom sickRoom = new SickRoom();
+					sickRoom.setMno(mno.getText());
+					sickRoom.setMname(mname.getText());
+					sickRoom.setNno(bname.getSelectedItem().toString());
+					sickRoom.setStatus(status.getSelectedItem().toString());
+					sk.SickroomInsert(sickRoom);
 				}
 			}
 		});

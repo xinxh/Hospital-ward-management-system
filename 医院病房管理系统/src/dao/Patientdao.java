@@ -24,17 +24,11 @@ public class Patientdao {
 public void seepatient(JTextField pname, JTextField page, JTextField surplus, JTextField dname_p, JTextField nname_p, JTextField sickroom, JTextArea cure, String pno) {
         PreparedStatement ps;
     try {
-        if(conn==null) {
-            JOptionPane.showMessageDialog(null, "数据库链接失败!", "提示信息", JOptionPane.WARNING_MESSAGE);
-        }else {
-            JOptionPane.showMessageDialog(null, "数据库链接成功", "提示信息", JOptionPane.WARNING_MESSAGE);
-        }
         ps = conn.prepareStatement("select * from patient where pno=?");
         ps.setString(1, pno);
         ResultSet rs = ps.executeQuery();
 
         if (rs.next()==true) {
-            JOptionPane.showMessageDialog(null, "有这个人", "提示信息", JOptionPane.WARNING_MESSAGE);
             pname.setText(rs.getString("Pname"));
             page.setText(rs.getString("Page"));
             String mno=rs.getString("Mno");
@@ -81,17 +75,11 @@ public void seepatient(JTextField pname, JTextField page, JTextField surplus, JT
 public void Balance_payment(JTextField pname, JTextField surplus, JTextField sickroom, JTextField pno, String patientno) {
     PreparedStatement ps;
     try {
-        if(conn==null) {
-            JOptionPane.showMessageDialog(null, "数据库链接失败!", "提示信息", JOptionPane.WARNING_MESSAGE);
-        }else {
-            JOptionPane.showMessageDialog(null, "数据库链接成功", "提示信息", JOptionPane.WARNING_MESSAGE);
-        }
         ps = conn.prepareStatement("select * from patient where pno=?");
         ps.setString(1, patientno);
         ResultSet rs = ps.executeQuery();
 
         if (rs.next()) {
-            JOptionPane.showMessageDialog(null, "欢迎进入缴费界面", "提示信息", JOptionPane.WARNING_MESSAGE);
             pno.setText(patientno);
             pname.setText(rs.getString("Pname"));
             String mno=rs.getString("Mno");
@@ -115,7 +103,6 @@ public void Balance_payment(JTextField pname, JTextField surplus, JTextField sic
     public void PatientInsert(String addpno, String addpname, String addpage, String addnname, String adddname,String adddsicken, String addpsex, String addmno, String addbed) {
         PreparedStatement ps;
         try {
-
             ps = conn.prepareStatement("insert into patient(Pno,Pname,Psex,Mno,Page,Bno,Dno,Nno,Sicken) values(?,?,?,?,?,?,?,?,?)");
             ps.setString(1, addpno);
             ps.setString(2, addpname);
@@ -133,7 +120,7 @@ public void Balance_payment(JTextField pname, JTextField surplus, JTextField sic
             JOptionPane.showMessageDialog(null, "插入成功", "提示信息", JOptionPane.WARNING_MESSAGE);
         } catch (SQLException e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "插入失败", "提示信息", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(null, "插入失败,请检查后重试", "提示信息", JOptionPane.WARNING_MESSAGE);
         }
     }
 

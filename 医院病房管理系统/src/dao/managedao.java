@@ -1,18 +1,23 @@
 package dao;
 
 import containt.containt;
+import javabean.Doctor;
 import javabean.Mark;
+import javabean.Nurse;
+import javabean.Patient;
 
 import javax.swing.*;
 import java.sql.*;
 import java.util.ArrayList;
 
-
+@SuppressWarnings("all")
 public class Managedao {
+    
     static Connection conn = null;
 
     //链接数据库
     public Managedao() {
+
         containt ct = new containt();
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -25,21 +30,35 @@ public class Managedao {
     }
 
 
+    ////////////////////////////////////////////
+    //医生姓名列表
+    public static ArrayList<Mark> doctor(){
+        PreparedStatement ps;
+        ArrayList<Mark> arr = new ArrayList<>();
+        try  {
+            ps = conn.prepareStatement("select dname from doctor ");
+            ResultSet resultSet = ps.executeQuery();
+            while(resultSet.next()){
+                Mark mark = new Mark();
+                mark.setDname(resultSet.getString("Dname"));
+                arr.add(mark);
+            }
+        }
+        catch  (SQLException  e)  {
+            e.printStackTrace();
+        }
+        return arr;
+    }
+
     //医生查询
-    public void seedoctor(JTextPane dname, JTextPane dage, JComboBox dsex, JTextPane contact, JTextPane career, JComboBox dono, String dno) {
+    public void seedoctor(JTextPane dname, JTextPane dage, JComboBox dsex, JTextPane contact, JTextPane career, JComboBox dono, Doctor doctor) {
+        //todo 判断有无这个人
         PreparedStatement ps;
         try {
-            if(conn==null) {
-                JOptionPane.showMessageDialog(null, "数据库链接失败!", "提示信息", JOptionPane.WARNING_MESSAGE);
-            }else {
-                JOptionPane.showMessageDialog(null, "数据库链接成功", "提示信息", JOptionPane.WARNING_MESSAGE);
-            }
-
             ps = conn.prepareStatement("select * from doctor where dno=?");
-            ps.setString(1, dno);
+            ps.setString(1, doctor.getDno());
             ResultSet rs = ps.executeQuery();
             if (rs.next()==true) {
-                JOptionPane.showMessageDialog(null, "有这个人", "提示信息", JOptionPane.WARNING_MESSAGE);
                 dname.setText(rs.getString("Dname"));
                 dsex.removeAllItems();
                 dsex.addItem(rs.getString("Dsex"));
@@ -51,89 +70,166 @@ public class Managedao {
                 ps = conn.prepareStatement("select * from office where ono=?");
                 ps.setString(1, ono);
                 ResultSet result = ps.executeQuery();
+
                 dono.removeAllItems();//移除默认的一些下拉选项
                 while (result.next()){
+                    String[] department = new String[] { "内科", "外科","妇科","儿科","辅助检查科室","精神科","五官科","肛肠科" };
+                    //添加组件内容
                     dono.addItem(result.getString("Oname"));//设置科室名称
+                    for (int i = 0; i < department.length; i++) {
+                        dono.addItem(department[i]);
+                    }
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "没这个人", "提示信息", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "没有该用户", "提示信息", JOptionPane.WARNING_MESSAGE);
+                
+                
             }
+
         } catch (Exception e) {
             e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "查询失败", "提示信息", JOptionPane.WARNING_MESSAGE);
+
         }
     }
 
     //删除医生
-    public void deletedoctor(String doctorno) {
+    public void deletedoctor(Doctor doctorno) {
+        
         PreparedStatement ps;
+        PreparedStatement ps8;//查询有没有该用户
         try {
-            if(conn==null) {
-                JOptionPane.showMessageDialog(null, "数据库链接失败!", "提示信息", JOptionPane.WARNING_MESSAGE);
-            }else {
-                JOptionPane.showMessageDialog(null, "数据库链接成功", "提示信息", JOptionPane.WARNING_MESSAGE);
-            }
-            ps = conn.prepareStatement("delete from doctor where dno=?");
-            ps.setString(1, doctorno);
-            int a= JOptionPane.showConfirmDialog(null, "确定要删除吗？", "提示信息", JOptionPane.YES_NO_OPTION);
-            if (a==JOptionPane.YES_NO_OPTION){
-                ps.executeUpdate();
+            ps8 = conn.prepareStatement("select * from doctor where dno=?");
+            ps8.setString(1, doctorno.getDno());
+            ResultSet rs8 = ps8.executeQuery();
+            if (rs8.next() == true) {
+                ps = conn.prepareStatement("delete from doctor where dno=?");
+                ps.setString(1, doctorno.getDno());
+                int a = JOptionPane.showConfirmDialog(null, "确定要删除吗？", "提示信息", JOptionPane.YES_NO_OPTION);
+                if (a == JOptionPane.YES_NO_OPTION) {
+                    ps.executeUpdate();
+                }
+
+            JOptionPane.showMessageDialog(null, "删除成功", "提示信息", JOptionPane.WARNING_MESSAGE);
+        }
+            else{
+                JOptionPane.showMessageDialog(null, "没有该用户", "提示信息", JOptionPane.WARNING_MESSAGE);
             }
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "删除失败", "提示信息", JOptionPane.WARNING_MESSAGE);
+
+        }
+    }
+
+    //医生信息更改
+    public void update_doctor(JTextPane dname, JTextPane dage, JComboBox dsex, JTextPane contact, JTextPane career, JComboBox dono, Doctor doctor) {
+        dname.setText(doctor.getDname_g());
+        dsex.removeAllItems();
+        dsex.addItem(doctor.getDsex_g());
+        dage.setText(doctor.getDage_g());
+        career.setText(doctor.getCareer_g());
+        contact.setText(doctor.getContact_g());
+        dono.addItem(doctor.getDno_g());//设置科室名称
+
+        PreparedStatement ps;
+        PreparedStatement ps1;//查询科室号
+        PreparedStatement ps2;//更新外界
+        try {
+            ps1 = conn.prepareStatement("select * from office where Oname=?");//查询科室号
+            ps1.setString(1, doctor.getDono_g());
+            ResultSet rs1 = ps1.executeQuery();
+
+            ps2 = conn.prepareStatement("update doctor_scheduling set Dname_scheduling=? where Dno_scheduling=?");//更新外界
+            ps2.setString(1, doctor.getDname_g());
+            ps2.setString(2, doctor.getDno_g());
+            System.out.println(doctor.getDno());
+            System.out.println(doctor.getDno_g());
+            ps2.executeUpdate();
+
+            ps = conn.prepareStatement("update doctor set Dname=?,Dsex=?,Dage=?,Career=?,Contact=?,Ono=? where Dno=?");
+            ps.setString(1, doctor.getDname_g());
+            ps.setString(2, doctor.getDsex_g());
+            ps.setString(3, doctor.getDage_g());
+            ps.setString(4, doctor.getCareer_g());
+            ps.setString(5, doctor.getContact_g());
+            ps.setString(7, doctor.getDno_g());
+            while (rs1.next()) {
+                ps.setString(6, rs1.getString("Ono"));
+            }
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(null, "插入成功", "提示信息", JOptionPane.WARNING_MESSAGE);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "插入失败,请检查后重试,请检查后重试", "提示信息", JOptionPane.WARNING_MESSAGE);
         }
     }
 
 
+//////////////////////////////////////////////////
     //病人查询
-    public void seepatient(JTextField pname, JTextField page, JComboBox psex, JTextField sicken, JTextField surplus, JTextField dname_p, JTextField nname_p, String pno) {
+    public void seepatient(JTextField pname, JTextField page, JComboBox psex, JTextField sicken, JTextField surplus, JComboBox dname_p, JComboBox nname_p, String pno) {
+        
         PreparedStatement ps;
         try {
-            if(conn==null) {
-                JOptionPane.showMessageDialog(null, "数据库链接失败!", "提示信息", JOptionPane.WARNING_MESSAGE);
-            }else {
-                JOptionPane.showMessageDialog(null, "数据库链接成功", "提示信息", JOptionPane.WARNING_MESSAGE);
-            }
             ps = conn.prepareStatement("select * from patient where pno=?");
             ps.setString(1, pno);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()==true) {
-                JOptionPane.showMessageDialog(null, "有这个人", "提示信息", JOptionPane.WARNING_MESSAGE);
                 pname.setText(rs.getString("Pname"));
                 page.setText(rs.getString("Page"));
                 psex.removeAllItems();
                 psex.addItem(rs.getString("Psex"));
+                psex.addItem("男");
+                psex.addItem("女");
+
                 sicken.setText(rs.getString("Sicken"));
                 //查询第二个表
                 String dno = rs.getString("Dno");
                 ps = conn.prepareStatement("select * from doctor where dno=?");
                 ps.setString(1, dno);
                 ResultSet rs2 = ps.executeQuery();
+                dname_p.removeAllItems();
                 while (rs2.next()){//主治医生名
-                    dname_p.setText(rs2.getString("Dname"));
+                    dname_p.addItem(rs2.getString("Dname"));
+                    String[] dname = new String[]{"张三","张四","张五","王三","王四","王五"
+                            ,"李三","李四","张五","赵三","赵四","赵五","高三","高四","高五"};
+                    //添加组件内容
+                    for (int i = 0; i < dname.length; i++) {
+                        dname_p.addItem(dname[i]);
+                    }
                 }
+
                 //查询第三个表
+                nname_p.removeAllItems();//移除默认的一些下拉选项
                 String nno = rs.getString("Nno");
                 ps = conn.prepareStatement("select * from nurse where nno=?");
                 ps.setString(1, nno);
                 ResultSet rs3 = ps.executeQuery();
-                while (rs3.next()){//责任护士名
-                    nname_p.setText(rs3.getString("Nname"));
+                while (rs3.next()) {//责任护士名
+                    nname_p.addItem(rs3.getString("Nname"));
+                    String[] nname = new String[]{"张三", "张二", "小麦", "小红", "小王", "小猪",
+                            "小扎", "小店", "小明", "小马", "小美", "小猫", "小东", "夏普", "达到",
+                            "张高", "张发", "张但", "张补", "张胡"};
+                    //添加组件内容
+                    for (int i = 0; i < nname.length; i++) {
+                        nname_p.addItem(nname[i]);
+                    }
                 }
                 //查询第四个表
                 ps = conn.prepareStatement("select * from surplus where pno=?");
                 ps.setString(1, pno);
                 ResultSet rs4 = ps.executeQuery();
-                    while (rs4.next()) {//查询余额
-                        surplus.setText("");//清空余额
-                        surplus.setText(rs4.getString("Surplus"));//余额
+                while (rs4.next()) {//查询余额
+                    surplus.setText("");//清空余额
+                    surplus.setText(rs4.getString("Surplus"));//余额
                 }
             }
         }catch (Exception e){
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "查询失败", "提示信息", JOptionPane.WARNING_MESSAGE);
+            
+            
         }
     }
 
@@ -141,11 +237,6 @@ public class Managedao {
     public void deletepatient(String doctorno) {
         PreparedStatement ps;
         try {
-            if(conn==null) {
-                JOptionPane.showMessageDialog(null, "数据库链接失败!", "提示信息", JOptionPane.WARNING_MESSAGE);
-            }else {
-                JOptionPane.showMessageDialog(null, "数据库链接成功", "提示信息", JOptionPane.WARNING_MESSAGE);
-            }
             ps = conn.prepareStatement("delete from patient where pno=?");
             ps.setString(1, doctorno);
             int a= JOptionPane.showConfirmDialog(null, "确定要删除吗？", "提示信息", JOptionPane.YES_NO_OPTION);
@@ -158,22 +249,60 @@ public class Managedao {
         }
     }
 
+    //病人信息修改
+    public void update_patient(Patient p) {
 
+        PreparedStatement ps;
+        PreparedStatement ps1;//更新余额
+        PreparedStatement ps2;//设置主治医生名字
+        PreparedStatement ps3;//设置责任护士名字
+        try {
+            ps1 = conn.prepareStatement("update surplus set surplus=?,pname=? where pno=?");//更新余额
+            ps1.setString(1, p.getSurplus());
+            ps1.setString(2, p.getPname());
+            ps1.setString(3, p.getPno());
+            ps1.executeUpdate();
+
+            ps2 = conn.prepareStatement("select dno from doctor where dname=?");//设置主治医生名字
+            ps2.setString(1, p.getDname_p());
+            ResultSet rs2 = ps2.executeQuery();
+
+            ps3 = conn.prepareStatement("select nno from nurse where nname=?");//设置责任护士名字
+            ps3.setString(1, p.getNname_p());
+            ResultSet rs3 =ps3.executeQuery();
+
+            ps = conn.prepareStatement("update patient set Pname=?,Psex=?,Page=?,Dno=?,Nno=?,Sicken=? where Pno=?");
+            ps.setString(1, p.getPname());
+            ps.setString(2, p.getPsex());
+            ps.setString(3, p.getPage());
+            while(rs2.next()){
+                ps.setString(4, rs2.getString("Dno"));
+            }
+            while(rs3.next()){
+                ps.setString(5, rs3.getString("Nno"));
+            }
+            ps.setString(6, p.getSicken());
+            ps.setString(7, p.getPno());
+            ps.executeUpdate();
+  /*          */
+
+            JOptionPane.showMessageDialog(null, "插入成功", "提示信息", JOptionPane.WARNING_MESSAGE);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "插入失败,请检查后重试,请检查后重试", "提示信息", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+
+    ////////////////////////////////////////////////////////////
     //护士查询
     public void seenurse(JTextPane nname, JTextPane nage, JComboBox nsex, JTextPane ncontact, JTextPane ncareer, String nno) {
         PreparedStatement ps;
         try {
-            if(conn==null) {
-                JOptionPane.showMessageDialog(null, "数据库链接失败!", "提示信息", JOptionPane.WARNING_MESSAGE);
-            }else {
-                JOptionPane.showMessageDialog(null, "数据库链接成功", "提示信息", JOptionPane.WARNING_MESSAGE);
-            }
             ps = conn.prepareStatement("select * from nurse where nno=?");
             ps.setString(1, nno);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()==true) {
-                JOptionPane.showMessageDialog(null, "有这个人", "提示信息", JOptionPane.WARNING_MESSAGE);
                 nname.setText(rs.getString("Nname"));
                 nage.setText(rs.getString("Nage"));
                 nsex.removeAllItems();
@@ -189,26 +318,72 @@ public class Managedao {
 
     //删除护士
     public void deletenurse(String nurseno) {
+        
         PreparedStatement ps;
+        PreparedStatement ps8;//查询有没有该用户
         try {
-            if(conn==null) {
-                JOptionPane.showMessageDialog(null, "数据库链接失败!", "提示信息", JOptionPane.WARNING_MESSAGE);
-            }else {
-                JOptionPane.showMessageDialog(null, "数据库链接成功", "提示信息", JOptionPane.WARNING_MESSAGE);
-            }
+            ps8 = conn.prepareStatement("select * from nurse where nno=?");
+            ps8.setString(1, nurseno);
+            ResultSet rs8 = ps8.executeQuery();
+            if (rs8.next()==true) {
             ps = conn.prepareStatement("delete from nurse where nno=?");
             ps.setString(1, nurseno);
             int a= JOptionPane.showConfirmDialog(null, "确定要删除吗？", "提示信息", JOptionPane.YES_NO_OPTION);
             if (a==JOptionPane.YES_NO_OPTION){
-                ps.executeUpdate();
+                ps.executeUpdate();}
+                
+                
+            }else{
+                JOptionPane.showMessageDialog(null, "没有该用户", "提示信息", JOptionPane.WARNING_MESSAGE);
+                
+                
             }
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "删除失败", "提示信息", JOptionPane.WARNING_MESSAGE);
+            
+            
+        }
+    }
+    //护士姓名列表
+    public static ArrayList<Mark> nurse() {
+        PreparedStatement ps;
+        ArrayList<Mark> arr = new ArrayList<>();
+        try  {
+            ps = conn.prepareStatement("select nname from nurse ");
+            ResultSet resultSet = ps.executeQuery();
+            while(resultSet.next()){
+                Mark mark = new Mark();
+                mark.setNname(resultSet.getString("Nname"));
+                arr.add(mark);
+            }
+        }
+        catch  (SQLException  e)  {
+            e.printStackTrace();
+        }
+        return arr;
+    }
+
+    //护士信息更改
+    public void update_nurse(Nurse nurse) {
+        PreparedStatement ps;
+        try {
+            ps = conn.prepareStatement("update nurse set Nname=?,Nsex=?,Nage=?,Contact=?,Career=? where Nno=?");
+            ps.setString(1, nurse.getNname());
+            ps.setString(2, nurse.getNsex());
+            ps.setString(3, nurse.getNage());
+            ps.setString(4, nurse.getContact());
+            ps.setString(5, nurse.getCareer());
+            ps.setString(6, nurse.getNno());
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(null, "插入成功", "提示信息", JOptionPane.WARNING_MESSAGE);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "插入失败,请检查后重试,请检查后重试", "提示信息", JOptionPane.WARNING_MESSAGE);
         }
     }
 
-
+////////////////////////////////////////////////////////////////////////////////
     //病房号查寻
     public static ArrayList<Mark> room(){
         PreparedStatement ps;
@@ -230,7 +405,9 @@ public class Managedao {
 
     //病床删除
     public void deletebed(String mno_b, String mno_m) {
+        
         PreparedStatement ps;
+
         try {
             ps = conn.prepareStatement("delete from bed where bno=?");
             String bno = mno_m+"-" + mno_b;
@@ -239,14 +416,18 @@ public class Managedao {
             if (a==JOptionPane.YES_NO_OPTION){
                 ps.executeUpdate();
             }
+            
         } catch (Exception e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "删除失败", "提示信息", JOptionPane.WARNING_MESSAGE);
+            
+            
         }
     }
 
     //病房删除
     public void deleteroom(String mno_m) {
+        
             PreparedStatement ps;
             PreparedStatement ps1;
             try {
@@ -276,12 +457,32 @@ public class Managedao {
             } catch (Exception e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(null, "删除失败", "提示信息", JOptionPane.WARNING_MESSAGE);
+                
+                
             }
 
 
     }
 
+    //病房和病床信息更改
+    public void update_sickroom(String bno_b, String status_b, String mno_b) {
+        PreparedStatement ps;
+        try {
+            ps = conn.prepareStatement("update bed set Status=? where Mno=? and Bno=?");
+            String bno = mno_b+"-"+bno_b;
+            ps.setString(1, status_b);
+            ps.setString(2, mno_b);
+            ps.setString(3, bno);
 
+
+            ps.executeUpdate();
+            JOptionPane.showMessageDialog(null, "更新成功", "提示信息", JOptionPane.WARNING_MESSAGE);
+
+        }catch (Exception e){
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "更新失败，请检查信息", "提示信息", JOptionPane.WARNING_MESSAGE);
+        }
+    }
 
 
 }

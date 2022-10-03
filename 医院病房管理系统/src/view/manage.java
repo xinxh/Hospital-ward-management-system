@@ -4,11 +4,13 @@ import dao.Doctordao;
 import dao.Managedao;
 import dao.NurseDao;
 import dao.Sickroomdao;
+import javabean.Doctor;
 import javabean.Mark;
+import javabean.Nurse;
+import javabean.Patient;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -21,16 +23,17 @@ import java.util.ArrayList;
 public class manage extends JFrame {
 
 
+    private JComboBox dname_p;
+    private JComboBox nname_p;
     private JComboBox nsex;
     private static JPanel contentPane;
     private JTextField dno;
     private JTextField pname;
-    private JTextField dname_p;
-    private JTextField nname_p;
     private JTextField surplus;
     private JTextField sicken;
     private JTextField page;
     private JTextField nno;
+    private JTextField tz;
     private JTable table;
     private JTextField pno;
     private JTextPane dname;
@@ -47,7 +50,6 @@ public class manage extends JFrame {
     /**
      * Launch the application.
      */
-
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -60,7 +62,10 @@ public class manage extends JFrame {
             }
         });
     }
+
     public manage() {
+
+
         setTitle("管理系统");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(456, 222, 700, 400);
@@ -70,7 +75,7 @@ public class manage extends JFrame {
         setContentPane(contentPane);
         contentPane.setLayout(null);
 
-        JButton btnNewButton_2 = new JButton("床位管理");//todo 床位管理
+        JButton btnNewButton_2 = new JButton("床位管理");
         btnNewButton_2.setBounds(10, 170, 93, 45);
         contentPane.add(btnNewButton_2);
 
@@ -90,13 +95,144 @@ public class manage extends JFrame {
         JPanel panel = new JPanel();
         panel.setBounds(103, 0, 581, 361);
         contentPane.add(panel);
-
+        tz = new JTextField();
         Managedao madao = new Managedao();
 
         panel.setLayout(null);
-        String[] department = new String[] { "内科", "外科","妇科","儿科","辅助检查科室","精神科","五官科","肛肠科" };
+        String[] department = new String[]{"内科", "外科", "妇科", "儿科", "辅助检查科室", "精神科", "五官科", "肛肠科"};
 
-      //todo 病人panel
+        //todo 病床panel
+        JPanel sickroomp = new JPanel();
+        sickroomp.setLayout(null);
+        sickroomp.setBounds(0, 0, 581, 361);
+        sickroomp.setVisible(false);
+        panel.add(sickroomp);
+
+        JLabel 病房号label = new JLabel("病房号");
+        病房号label.setBounds(64, 21, 51, 24);
+        sickroomp.add(病房号label);
+
+        JLabel 病床号label = new JLabel("病床号");
+        病床号label.setBounds(234, 21, 51, 24);
+        sickroomp.add(病床号label);
+
+        JLabel 状态label = new JLabel("状态");
+        状态label.setBounds(402, 21, 36, 24);
+        sickroomp.add(状态label);
+
+        JLabel 病房label = new JLabel("病房");
+        病房label.setBounds(64, 63, 29, 24);
+        sickroomp.add(病房label);
+
+        JLabel 病床label = new JLabel("病床");
+        病床label.setBounds(64, 83, 29, 24);
+        sickroomp.add(病床label);
+
+        JComboBox mno = new JComboBox();
+        mno.setBounds(110, 22, 47, 23);
+        ArrayList<Mark> marks = Managedao.room();
+        for (Mark mark : marks) {
+            mno.addItem(mark.getMno());
+        }
+        sickroomp.add(mno);
+
+        JComboBox bno = new JComboBox();
+        bno.setBounds(282, 22, 62, 23);
+        bno.addItem("1");
+        bno.addItem("2");
+        bno.addItem("3");
+        bno.addItem("4");
+        sickroomp.add(bno);
+
+        JComboBox status = new JComboBox();
+        status.setBounds(439, 22, 62, 23);
+        status.addItem("已分配");
+        status.addItem("未分配");
+        sickroomp.add(status);
+
+        JButton 添加病房 = new JButton("添加病房");
+        添加病房.setBounds(64, 263, 93, 23);
+        sickroomp.add(添加病房);
+
+        JButton 添加病床 = new JButton("添加病床");
+        添加病床.setBounds(64, 308, 93, 23);
+        sickroomp.add(添加病床);
+
+
+        JButton 病床信息更改 = new JButton("病床信息更改");
+        病床信息更改.setBounds(400, 263, 111, 68);
+        sickroomp.add(病床信息更改);
+        病床信息更改.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String bno_b = bno.getSelectedItem().toString();// 获取文本值
+                String mno_b = mno.getSelectedItem().toString();// 获取文本值
+                String status_b = status.getSelectedItem().toString();// 获取文本值
+                madao.update_sickroom(bno_b, status_b, mno_b);//删除
+            }
+        });
+
+        JButton 删除病房 = new JButton("删除病房");
+        删除病房.setBounds(251, 263, 93, 23);
+        sickroomp.add(删除病房);
+        删除病房.addItemListener(new ItemListener() {
+            public void itemStateChanged(final ItemEvent e) {
+                int index = mno.getSelectedIndex();
+                if (index != 0) { // ==0表示选中的事第一个
+                    System.out.println(index);
+                }
+            }
+        });
+        删除病房.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String mno_m = mno.getSelectedItem().toString();// 获取文本值
+                madao.deleteroom(mno_m);//删除
+            }
+        });
+
+        JButton 删除病床 = new JButton("删除病床");
+        删除病床.setBounds(251, 308, 93, 23);
+        sickroomp.add(删除病床);
+        删除病床.addItemListener(new ItemListener() {
+            public void itemStateChanged(final ItemEvent e) {
+                int index = mno.getSelectedIndex();
+                if (index != 0) { // ==0表示选中的事第一个
+                    System.out.println(index);
+                }
+            }
+
+        });
+        删除病床.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String mno_b = bno.getSelectedItem().toString();// 获取文本值
+                String mno_m = mno.getSelectedItem().toString();// 获取文本值
+                madao.deletebed(mno_b, mno_m);//删除
+            }
+        });
+
+
+        //表格病床
+        JScrollPane scrollPane = new JScrollPane();
+        scrollPane.setBounds(111, 63, 390, 175);
+        sickroomp.add(scrollPane);
+
+        JPanel tb = new JPanel();
+        tb.setBounds(111, 63, 390, 175);
+        tb.setLayout(new BorderLayout());
+        scrollPane.add(tb);
+
+        Object[][] data = new Object[50][5];
+        String[] columnNames = {"房间号", "病床号", "状态"};
+
+        JTable table_1 = new JTable(data, columnNames);
+        tb.add(table_1, BorderLayout.CENTER);
+        scrollPane.setViewportView(tb);
+        JTableHeader header = table_1.getTableHeader();
+        tb.add(header, BorderLayout.NORTH);
+
+        //todo 病人panel
         JPanel patientp = new JPanel();
         patientp.setLayout(null);
         patientp.setBounds(0, 0, 581, 361);
@@ -140,13 +276,11 @@ public class manage extends JFrame {
         patientp.add(查询);
         查询.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // 进行输入框判断，为空则不进行登录操作。
-                //todo 病人按钮事件
                 if (pno.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "请输入编号", "提示信息", JOptionPane.WARNING_MESSAGE);
                 } else {
                     String patientno = pno.getText();// 获取文本值
-                    madao.seepatient(pname, page, psex,sicken,surplus,dname_p,nname_p, patientno);
+                    madao.seepatient(pname, page, psex, sicken, surplus, dname_p, nname_p, patientno);
                 }
             }
         });
@@ -165,31 +299,40 @@ public class manage extends JFrame {
                     JOptionPane.showMessageDialog(null, "请输入编号输入有误", "提示信息", JOptionPane.WARNING_MESSAGE);
                 } else {
                     String patientno = pno.getText();// 获取文本值
-                    madao.seepatient(pname, page, psex,sicken,surplus,dname_p,nname_p, patientno);//先默认查询
+                    madao.seepatient(pname, page, psex, sicken, surplus, dname_p, nname_p, patientno);//先默认查询
                     madao.deletepatient(patientno);//删除
                 }
             }
         });
 
         JButton 信息更改 = new JButton("信息更改");
-
         信息更改.setBounds(453, 303, 93, 23);
         patientp.add(信息更改);
+        信息更改.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (pno.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "请输入编号输入有误", "提示信息", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    Patient p = new Patient();
+                    p.setPno(String.valueOf(pno.getText()));
+                    p.setPname(String.valueOf(pname.getText()));
+                    p.setPage(String.valueOf(page.getText()));
+                    p.setPsex(String.valueOf(psex.getSelectedItem()));
+                    p.setSicken(String.valueOf(sicken.getText()));
+                    p.setSurplus(String.valueOf(surplus.getText()));
+//todo 病人的信息更改
+                    p.setDname_p(String.valueOf(dname_p.getSelectedItem()));
+                    p.setNname_p(String.valueOf(nname_p.getSelectedItem()));
+                    madao.update_patient(p);
+                }
+            }
+        });
 
         pname = new JTextField();
         pname.setColumns(10);
         pname.setBounds(68, 27, 90, 20);
         patientp.add(pname);
-
-        dname_p = new JTextField();
-        dname_p.setColumns(10);
-        dname_p.setBounds(277, 76, 80, 20);
-        patientp.add(dname_p);
-
-        nname_p = new JTextField();
-        nname_p.setColumns(10);
-        nname_p.setBounds(464, 76, 80, 20);
-        patientp.add(nname_p);
 
         surplus = new JTextField();
         surplus.setColumns(10);
@@ -212,14 +355,28 @@ public class manage extends JFrame {
         patientp.add(pno);
 
         psex = new JComboBox();
-        psex.setBounds(277, 26, 53, 23);
+        psex.setBounds(277, 26, 80, 23);
         psex.addItem("男");
         psex.addItem("女");
         patientp.add(psex);
 
+        dname_p = new JComboBox();
+        dname_p.setBounds(277, 75, 80, 23);
+        patientp.add(dname_p);
+        ArrayList<Mark> marks1 = Managedao.doctor();
+        for (Mark mark : marks1) {
+            dname_p.addItem(mark.getDname());
+        }
 
-        
-        
+        nname_p = new JComboBox();
+        nname_p.setBounds(466, 75, 80, 23);
+        patientp.add(nname_p);
+        ArrayList<Mark> marks2 = Managedao.nurse();
+        for (Mark mark : marks2) {
+            nname_p.addItem(mark.getNname());
+        }
+
+
         //todo 医生panel
         JPanel doctorp = new JPanel();
         doctorp.setLayout(null);
@@ -269,18 +426,35 @@ public class manage extends JFrame {
                 if (dno.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "请输入编号输入有误", "提示信息", JOptionPane.WARNING_MESSAGE);
                 } else {
-                    String doctorno = dno.getText();// 获取文本值
-                    madao.seedoctor(dname, dage, dsex, contact, career, dono, doctorno);//先默认查询
-
-                    madao.deletedoctor(doctorno);
+                    Doctor db = new Doctor();
+                    db.setDno(String.valueOf(dno.getText()));
+                    madao.seedoctor(dname, dage, dsex, contact, career, dono, db);//先默认查询
+                    madao.deletedoctor(db);//删除}
                 }
-
             }
         });
 
         JButton 信息更改1 = new JButton("信息更改");
         信息更改1.setBounds(456, 308, 93, 23);
         doctorp.add(信息更改1);
+        信息更改1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (dno.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "请输入编号输入有误", "提示信息", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    Doctor doctor = new Doctor();
+                    doctor.setDno_g(String.valueOf(dno.getText()));
+                    doctor.setDname_g(String.valueOf(dname.getText()));
+                    doctor.setDage_g(String.valueOf(dage.getText()));
+                    doctor.setDsex_g(String.valueOf(dsex.getSelectedItem()));
+                    doctor.setContact_g(String.valueOf(contact.getText()));
+                    doctor.setCareer_g(String.valueOf(career.getText()));
+                    doctor.setDono_g(String.valueOf(dono.getSelectedItem()));
+                    madao.update_doctor(dname, dage, dsex, contact, career, dono, doctor);
+                }
+            }
+        });
 
         JButton 新建医生 = new JButton("新建医生");
         新建医生.setBounds(456, 212, 93, 23);
@@ -291,13 +465,12 @@ public class manage extends JFrame {
         doctorp.add(确定);
         确定.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // 进行输入框判断，为空则不进行登录操作。
-                //todo 医生查询按钮
                 if (dno.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "请输入编号输入有误", "提示信息", JOptionPane.WARNING_MESSAGE);
                 } else {
-                    String doctorno = dno.getText();// 获取文本值
-                    madao.seedoctor(dname, dage, dsex, contact, career, dono, doctorno);
+                    Doctor doctor = new Doctor();
+                    doctor.setDno(String.valueOf(dno.getText()));
+                    madao.seedoctor(dname, dage, dsex, contact, career, dono, doctor);
                 }
             }
         });
@@ -323,6 +496,7 @@ public class manage extends JFrame {
         career.setBounds(369, 75, 62, 21);
         doctorp.add(career);
 
+
         dsex = new JComboBox();
         dsex.setBounds(247, 24, 44, 23);
         doctorp.add(dsex);
@@ -335,33 +509,31 @@ public class manage extends JFrame {
             dono.addItem(department[i]);
         }
         doctorp.add(dono);
-        
+
         JScrollPane scrollPane_2 = new JScrollPane();
         scrollPane_2.setBounds(76, 108, 355, 186);
         doctorp.add(scrollPane_2);
-        
+
         JPanel panel_2 = new JPanel();
         scrollPane_2.setViewportView(panel_2);
         panel_2.setLayout(new BorderLayout(0, 0));
 
-        Object[][] data_d= new Object[20][6];
-        String[] columnNames_d= {"医生号","姓名","性别","职位","联系方式","值班时间"};
-        
-        table_3 = new JTable(data_d,columnNames_d);
+        Object[][] data_d = new Object[20][6];
+        String[] columnNames_d = {"医生号", "姓名", "性别", "职位", "联系方式", "值班时间"};
+
+        table_3 = new JTable(data_d, columnNames_d);
         table_3.getColumnModel().getColumn(0).setPreferredWidth(40);
         table_3.getColumnModel().getColumn(1).setPreferredWidth(50);
         table_3.getColumnModel().getColumn(2).setPreferredWidth(30);
         table_3.getColumnModel().getColumn(3).setPreferredWidth(50);
         table_3.getColumnModel().getColumn(4).setPreferredWidth(80);//
         table_3.getColumnModel().getColumn(5).setPreferredWidth(80);
-//        table_3.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         panel_2.add(table_3, BorderLayout.CENTER);
-        JTableHeader header_d=table_3.getTableHeader();
+        JTableHeader header_d = table_3.getTableHeader();
         panel_2.add(header_d, BorderLayout.NORTH);
 
-        
-        
-      //todo 护士panel
+
+        //todo 护士panel
         JPanel nursep = new JPanel();
         nursep.setLayout(null);
         nursep.setBounds(0, 0, 581, 361);
@@ -430,8 +602,6 @@ public class manage extends JFrame {
         确定1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // 进行输入框判断，为空则不进行登录操作。
-                //todo 护士按钮事件
                 if (nno.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "请输入编号", "提示信息", JOptionPane.WARNING_MESSAGE);
                 } else {
@@ -460,161 +630,50 @@ public class manage extends JFrame {
         JButton 信息更改11 = new JButton("信息更改");
         信息更改11.setBounds(456, 308, 93, 23);
         nursep.add(信息更改11);
+        信息更改11.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (nno.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "请输入编号输入有误", "提示信息", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    Nurse nurse = new Nurse();
+                    nurse.setNno(String.valueOf(nno.getText()));
+                    nurse.setNname(String.valueOf(nname.getText()));
+                    nurse.setNage(String.valueOf(nage.getText()));
+                    nurse.setNsex(String.valueOf(nsex.getSelectedItem()));
+                    nurse.setContact(String.valueOf(ncontact.getText()));
+                    nurse.setCareer(String.valueOf(ncareer.getText()));
+                    madao.update_nurse(nurse);
+                }
+            }
+        });
+
 
         JButton 新建护士 = new JButton("新建护士");
         新建护士.setBounds(456, 212, 93, 23);
         nursep.add(新建护士);
-        
-      //表格护士
+
+        //表格护士
         JScrollPane scrollPane_1 = new JScrollPane();
         scrollPane_1.setBounds(76, 108, 375, 175);
         nursep.add(scrollPane_1);
-        
+
         JPanel panel_1 = new JPanel();
         scrollPane_1.setViewportView(panel_1);
         panel_1.setLayout(new BorderLayout(0, 0));
-        
-        Object[][] data_n= new Object[20][5];
-        String[] columnNames_n= {"护士号","姓名","性别","联系方式","值班时间"};
 
-        table_2 = new JTable(data_n,columnNames_n);
+        Object[][] data_n = new Object[20][5];
+        String[] columnNames_n = {"护士号", "姓名", "性别", "联系方式", "值班时间"};
+
+        table_2 = new JTable(data_n, columnNames_n);
         table_2.getColumnModel().getColumn(0).setPreferredWidth(10);
         table_2.getColumnModel().getColumn(1).setPreferredWidth(10);
         table_2.getColumnModel().getColumn(2).setPreferredWidth(10);
         table_2.getColumnModel().getColumn(3).setPreferredWidth(50);
         table_2.getColumnModel().getColumn(4).setPreferredWidth(50);//
         panel_1.add(table_2, BorderLayout.CENTER);
-        JTableHeader header_n=table_2.getTableHeader();
+        JTableHeader header_n = table_2.getTableHeader();
         panel_1.add(header_n, BorderLayout.NORTH);
-        
-        
-        //todo 病床panel
-        JPanel sickroomp = new JPanel();
-        sickroomp.setLayout(null);
-        sickroomp.setBounds(0, 0, 581, 361);
-        sickroomp.setVisible(false);
-        panel.add(sickroomp);
-
-        JLabel 病房号label = new JLabel("病房号");
-        病房号label.setBounds(64, 21, 51, 24);
-        sickroomp.add(病房号label);
-
-        JLabel 病床号label = new JLabel("病床号");
-        病床号label.setBounds(234, 21, 51, 24);
-        sickroomp.add(病床号label);
-
-        JLabel 状态label = new JLabel("状态");
-        状态label.setBounds(402, 21, 36, 24);
-        sickroomp.add(状态label);
-
-        JLabel 病房label = new JLabel("病房");
-        病房label.setBounds(64, 63, 29, 24);
-        sickroomp.add(病房label);
-
-        JLabel 病床label = new JLabel("病床");
-        病床label.setBounds(64, 83, 29, 24);
-        sickroomp.add(病床label);
-
-        JComboBox mno = new JComboBox();
-        mno.setBounds(110, 22, 47, 23);
-        //todo arrayliast
-        ArrayList<Mark> marks = Managedao.room();
-        for (Mark mark : marks) {
-            mno.addItem(mark.getMno());
-        }
-        sickroomp.add(mno);
-        JComboBox bno = new JComboBox();
-        bno.setBounds(282, 22, 62, 23);
-        bno.addItem("1");
-        bno.addItem("2");
-        bno.addItem("3");
-        bno.addItem("4");
-        sickroomp.add(bno);
-
-        JComboBox status = new JComboBox();
-        status.setBounds(439, 22, 62, 23);
-        status.addItem("已分配");
-        status.addItem("未分配");
-        sickroomp.add(status);
-
-        JButton 添加病房 = new JButton("添加病房");
-        添加病房.setBounds(64, 263, 93, 23);
-        sickroomp.add(添加病房);
-
-
-
-        JButton 病房信息更改 = new JButton("病房信息更改");
-        病房信息更改.setBounds(414, 263, 111, 23);
-        sickroomp.add(病房信息更改);
-
-        JButton 添加病床 = new JButton("添加病床");
-        添加病床.setBounds(64, 308, 93, 23);
-        sickroomp.add(添加病床);
-
-        JButton 删除病房 = new JButton("删除病房");
-        删除病房.setBounds(251, 263, 93, 23);
-        sickroomp.add(删除病房);
-        删除病房.addItemListener(new ItemListener() {
-            public void itemStateChanged(final ItemEvent e) {
-                int index = mno.getSelectedIndex();
-                if (index != 0) { // ==0表示选中的事第一个
-                    System.out.println(index);
-                }
-            }
-        });
-        删除病房.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String mno_m = mno.getSelectedItem().toString();// 获取文本值
-                madao.deleteroom(mno_m);
-
-            }
-        });
-
-        JButton 删除病床 = new JButton("删除病床");
-        删除病床.setBounds(251, 308, 93, 23);
-        sickroomp.add(删除病床);
-        删除病床.addItemListener(new ItemListener() {
-            public void itemStateChanged(final ItemEvent e) {
-                int index = mno.getSelectedIndex();
-                if (index != 0) { // ==0表示选中的事第一个
-                    System.out.println(index);
-                }
-            }
-
-        });
-        删除病床.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String mno_b = bno.getSelectedItem().toString();// 获取文本值
-                String mno_m = mno.getSelectedItem().toString();// 获取文本值
-                madao.deletebed(mno_b,mno_m);
-
-            }
-        });
-
-        JButton 病床信息更改 = new JButton("病床信息更改");
-        病床信息更改.setBounds(414, 308, 111, 23);
-        sickroomp.add(病床信息更改);
-
-        //表格病床
-        JScrollPane scrollPane = new JScrollPane();
-        scrollPane.setBounds(111, 63, 390, 175);
-        sickroomp.add(scrollPane);
-
-        JPanel tb=new JPanel();
-        tb.setBounds(111, 63, 390, 175);
-        tb.setLayout(new BorderLayout());
-        scrollPane.add(tb);
-        
-        Object[][] data= new Object[50][5];
-        String[] columnNames= {"房间号","病床号","状态"};
-       
-        JTable table_1 = new JTable(data,columnNames);
-        tb.add(table_1,BorderLayout.CENTER);
-        scrollPane.setViewportView(tb);
-        JTableHeader header=table_1.getTableHeader();
-        tb.add(header,BorderLayout.NORTH);
 
 //设置panel的可见性
         btnNewButton_3.addActionListener(new ActionListener() {
@@ -657,47 +716,51 @@ public class manage extends JFrame {
                 doctorp.setVisible(false);
                 patientp.setVisible(false);
                 sickroomp.setVisible(true);
-                Sickroomdao sd=new Sickroomdao();
+                Sickroomdao sd = new Sickroomdao();
                 sd.show(data);
             }
         });
 // 新建功能
         新建医生.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                pname.setText("doctor");
-                String tt = pname.getText();
+                tz.setText("doctor");
+                String tt = tz.getText();
                 new Add(tt);
                 new Add();
             }
         });
         新建护士.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                pname.setText("nurse");
-                String tt = pname.getText();
+                tz.setText("nurse");
+                String tt = tz.getText();
                 new Add(tt);
                 new Add();
             }
         });
         添加患者.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                pname.setText("patient");
-                String tt = pname.getText();
+                tz.setText("patient");
+                String tt = tz.getText();
                 new Add(tt);
                 new Add();
             }
         });
         添加病房.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                pname.setText("sickroom");
-                String tt = pname.getText();
+                ArrayList<Mark> marks = Managedao.room();
+                for (Mark mark : marks) {
+                    mno.addItem(mark.getMno());
+                }
+                tz.setText("sickroom");
+                String tt = tz.getText();
                 new Add(tt);
                 new Add();
             }
         });
         添加病床.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                pname.setText("sickroom");
-                String tt = pname.getText();
+                tz.setText("sickroom");
+                String tt = tz.getText();
                 new Add(tt);
                 new Add();
             }
