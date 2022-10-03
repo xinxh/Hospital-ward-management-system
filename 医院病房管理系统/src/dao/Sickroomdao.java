@@ -53,23 +53,16 @@ public class Sickroomdao {
     
     
     
-    
+   //病床表格
     public void show(Object info[][]) {
     	 try {
-			PreparedStatement ps=conn.prepareStatement("select * from mark");
-			PreparedStatement ps1=conn.prepareStatement("select * from bed");
+			PreparedStatement ps=conn.prepareStatement("select * from bed");
 			ResultSet rs=ps.executeQuery();
-			ResultSet rs1=ps1.executeQuery();
 			int count=0;
 			while(rs.next()) {
 				info[count][0]=rs.getString("Mno");
-				info[count][1]=rs.getString("Mname");
-				count++;
-			}
-			count=0;
-			while(rs1.next()) {
-				info[count][2]=rs1.getString("Bno");
-				info[count][3]=rs1.getString("Status");
+				info[count][1]=rs.getString("Bno");
+				info[count][2]=rs.getString("Status");
 				count++;
 			}
 		} catch (SQLException e) {

@@ -79,6 +79,33 @@ public class Doctordao {
 		}
 	}
 
+//医生的患者表格
+	public void show(Object doctor[][]) {
+		try {
+			PreparedStatement ps=conn.prepareStatement("select * from doctor");
+			PreparedStatement ps1=conn.prepareStatement("select * from doctor_scheduling");
+			ResultSet rs=ps.executeQuery();
+			ResultSet rs1=ps1.executeQuery();
+			int count=0;
+			while(rs.next()) {
+				doctor[count][0]=rs.getString("Dno");
+				doctor[count][1]=rs.getString("Dname");
+				doctor[count][2]=rs.getString("Dsex");
+				doctor[count][3]=rs.getString("Career");
+				doctor[count][4]=rs.getString("Contact");
+				count++;
+			}
+			count=0;
+			while(rs1.next()) {
+				doctor[count][5]=rs1.getString("Time");
+				count++;
+			}
+		} catch (SQLException e) {
+			// TODO 自动生成的 catch 块
+			e.printStackTrace();
+		}
+	}
+
 
 
 
