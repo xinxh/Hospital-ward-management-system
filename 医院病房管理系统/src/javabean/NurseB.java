@@ -1,6 +1,6 @@
 package javabean;
 
-public class Nurse {
+public class NurseB {
     private String nno;
     private String nname;
     private String nsex;

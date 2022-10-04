@@ -1,127 +1,105 @@
 package view;
 
-import dao.Patientdao;
+import dao.PatientDao;
+import javabean.PatientB;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
-import javax.swing.JButton;
-import javax.swing.JTable;
-import java.awt.event.ActionListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class pay extends JFrame {
 
-	private String patientno;
-	private JPanel sickroomlabel;
-	private JTextField pno;
-	private JTextField pname;
-	private JTextField surplus;
-	private JTextField sickroom;
-	private JTextField newsurplus;
-	private JTable drug;
+    private String patientno;
+    private JPanel sickroomlabel;
+    private JTextField pno;
+    private JTextField pname;
+    private JTextField surplus;
+    private JTextField sickroom;
+    private JTextField newsurplus;
 
 
+    public static void main(String[] args) {
+        EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                try {
+                    PatientB patientB = new PatientB();
+                    pay frame = new pay(patientB);
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 
+    //有参构造
+    public pay(PatientB pat) {
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					pay frame = new pay();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+        setTitle("缴费系统");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setBounds(446, 235, 581, 361);
+        sickroomlabel = new JPanel();
+        sickroomlabel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        this.setVisible(true);
+        PatientDao padao = new PatientDao();
+        setContentPane(sickroomlabel);
+        sickroomlabel.setLayout(null);
 
-	/**
-	 * Create the frame.
-	 * @return 
-	 */
-//有参构造
-//无参构造
-	public pay() {
-		setTitle("缴费系统");
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(446, 235, 581, 361);
-		sickroomlabel = new JPanel();
-		sickroomlabel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		this.setVisible(true);
-		Patientdao padao=new Patientdao();
-		setContentPane(sickroomlabel);
-		sickroomlabel.setLayout(null);
-		
-		JLabel idlabel = new JLabel("身份证");
-		idlabel.setBounds(42, 24, 48, 15);
-		sickroomlabel.add(idlabel);
+        JLabel idlabel = new JLabel("身份证");
+        idlabel.setBounds(59, 64, 48, 15);
+        sickroomlabel.add(idlabel);
 
-		JLabel druglabel = new JLabel("已使用药品");
-		druglabel.setBounds(24, 133, 66, 15);
-		sickroomlabel.add(druglabel);
-		
-		JLabel pnamelabel = new JLabel("姓名");
-		pnamelabel.setBounds(42, 68, 41, 15);
-		sickroomlabel.add(pnamelabel);
-		
-		JLabel surpluslabel = new JLabel("当前余额");
-		surpluslabel.setBounds(300, 68, 57, 15);
-		sickroomlabel.add(surpluslabel);
+        JLabel pnamelabel = new JLabel("姓名");
+        pnamelabel.setBounds(59, 128, 41, 15);
+        sickroomlabel.add(pnamelabel);
 
-		JLabel lblNewLabel_1_2 = new JLabel("床位");
-		lblNewLabel_1_2.setBounds(300, 24, 41, 15);
-		sickroomlabel.add(lblNewLabel_1_2);
+        JLabel surpluslabel = new JLabel("当前余额");
+        surpluslabel.setBounds(329, 125, 57, 15);
+        sickroomlabel.add(surpluslabel);
 
-		JLabel surpluslabel2 = new JLabel("缴费金额");
-		surpluslabel2.setBounds(85, 278, 54, 15);
-		sickroomlabel.add(surpluslabel2);
+        JLabel lblNewLabel_1_2 = new JLabel("床位");
+        lblNewLabel_1_2.setBounds(329, 61, 41, 15);
+        sickroomlabel.add(lblNewLabel_1_2);
 
-		pno = new JTextField();
-		pno.setBounds(100, 21, 173, 21);
-		sickroomlabel.add(pno);
-		pno.setColumns(10);
-		
-		pname = new JTextField();
-		pname.setBounds(100, 65, 66, 21);
-		sickroomlabel.add(pname);
-		pname.setColumns(10);
-		
-		surplus = new JTextField();
-		surplus.setBounds(367, 65, 79, 21);
-		sickroomlabel.add(surplus);
-		surplus.setColumns(10);
-		
-		sickroom = new JTextField();
-		sickroom.setColumns(10);
-		sickroom.setBounds(367, 21, 66, 21);
-		sickroomlabel.add(sickroom);
+        JLabel surpluslabel2 = new JLabel("缴费金额");
+        surpluslabel2.setBounds(106, 217, 54, 15);
+        sickroomlabel.add(surpluslabel2);
 
-		newsurplus = new JTextField();
-		newsurplus.setColumns(10);
-		newsurplus.setBounds(149, 275, 79, 21);
-		sickroomlabel.add(newsurplus);
-		
-		JButton btnNewButton = new JButton("确认缴费");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
-		btnNewButton.setBounds(300, 274, 93, 23);
-		sickroomlabel.add(btnNewButton);
-		
-		drug = new JTable();
-		drug.setBounds(100, 133, 409, 112);
-		sickroomlabel.add(drug);
+        pno = new JTextField(pat.getPno_c());
+        pno.setBounds(117, 61, 173, 21);
+        sickroomlabel.add(pno);
+        pno.setColumns(10);
 
-	}
+        pname = new JTextField(pat.getPname_c());
+        pname.setBounds(117, 125, 66, 21);
+        sickroomlabel.add(pname);
+        pname.setColumns(10);
+
+        surplus = new JTextField(pat.getSurplus_c());
+        surplus.setBounds(396, 122, 79, 21);
+        sickroomlabel.add(surplus);
+        surplus.setColumns(10);
+
+        sickroom = new JTextField(pat.getBno_c());
+        sickroom.setColumns(10);
+        sickroom.setBounds(396, 58, 66, 21);
+        sickroomlabel.add(sickroom);
+
+        newsurplus = new JTextField();
+        newsurplus.setColumns(10);
+        newsurplus.setBounds(170, 214, 79, 21);
+        sickroomlabel.add(newsurplus);
+
+        JButton btnNewButton = new JButton("确认缴费");
+        btnNewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        btnNewButton.setBounds(321, 213, 93, 23);
+        sickroomlabel.add(btnNewButton);
+
+    }
 }

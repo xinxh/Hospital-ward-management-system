@@ -1,13 +1,13 @@
 package view;
 
-import dao.Doctordao;
-import dao.Managedao;
+import dao.DoctorDao;
+import dao.ManageDao;
 import dao.NurseDao;
-import dao.Sickroomdao;
-import javabean.Doctor;
-import javabean.Mark;
-import javabean.Nurse;
-import javabean.Patient;
+import dao.SickroomDao;
+import javabean.DoctorB;
+import javabean.MarkB;
+import javabean.NurseB;
+import javabean.PatientB;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -96,7 +96,7 @@ public class manage extends JFrame {
         panel.setBounds(103, 0, 581, 361);
         contentPane.add(panel);
         tz = new JTextField();
-        Managedao madao = new Managedao();
+        ManageDao madao = new ManageDao();
 
         panel.setLayout(null);
         String[] department = new String[]{"内科", "外科", "妇科", "儿科", "辅助检查科室", "精神科", "五官科", "肛肠科"};
@@ -130,9 +130,9 @@ public class manage extends JFrame {
 
         JComboBox mno = new JComboBox();
         mno.setBounds(110, 22, 47, 23);
-        ArrayList<Mark> marks = Managedao.room();
-        for (Mark mark : marks) {
-            mno.addItem(mark.getMno());
+        ArrayList<MarkB> markBS = ManageDao.room();
+        for (MarkB markb : markBS) {
+            mno.addItem(markb.getMno());
         }
         sickroomp.add(mno);
 
@@ -314,7 +314,7 @@ public class manage extends JFrame {
                 if (pno.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "请输入编号输入有误", "提示信息", JOptionPane.WARNING_MESSAGE);
                 } else {
-                    Patient p = new Patient();
+                    PatientB p = new PatientB();
                     p.setPno(String.valueOf(pno.getText()));
                     p.setPname(String.valueOf(pname.getText()));
                     p.setPage(String.valueOf(page.getText()));
@@ -363,17 +363,17 @@ public class manage extends JFrame {
         dname_p = new JComboBox();
         dname_p.setBounds(277, 75, 80, 23);
         patientp.add(dname_p);
-        ArrayList<Mark> marks1 = Managedao.doctor();
-        for (Mark mark : marks1) {
-            dname_p.addItem(mark.getDname());
+        ArrayList<MarkB> marks1 = ManageDao.doctor();
+        for (MarkB markb : marks1) {
+            dname_p.addItem(markb.getDname());
         }
 
         nname_p = new JComboBox();
         nname_p.setBounds(466, 75, 80, 23);
         patientp.add(nname_p);
-        ArrayList<Mark> marks2 = Managedao.nurse();
-        for (Mark mark : marks2) {
-            nname_p.addItem(mark.getNname());
+        ArrayList<MarkB> marks2 = ManageDao.nurse();
+        for (MarkB markb : marks2) {
+            nname_p.addItem(markb.getNname());
         }
 
 
@@ -426,7 +426,7 @@ public class manage extends JFrame {
                 if (dno.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "请输入编号输入有误", "提示信息", JOptionPane.WARNING_MESSAGE);
                 } else {
-                    Doctor db = new Doctor();
+                    DoctorB db = new DoctorB();
                     db.setDno(String.valueOf(dno.getText()));
                     madao.seedoctor(dname, dage, dsex, contact, career, dono, db);//先默认查询
                     madao.deletedoctor(db);//删除}
@@ -443,15 +443,15 @@ public class manage extends JFrame {
                 if (dno.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "请输入编号输入有误", "提示信息", JOptionPane.WARNING_MESSAGE);
                 } else {
-                    Doctor doctor = new Doctor();
-                    doctor.setDno_g(String.valueOf(dno.getText()));
-                    doctor.setDname_g(String.valueOf(dname.getText()));
-                    doctor.setDage_g(String.valueOf(dage.getText()));
-                    doctor.setDsex_g(String.valueOf(dsex.getSelectedItem()));
-                    doctor.setContact_g(String.valueOf(contact.getText()));
-                    doctor.setCareer_g(String.valueOf(career.getText()));
-                    doctor.setDono_g(String.valueOf(dono.getSelectedItem()));
-                    madao.update_doctor(dname, dage, dsex, contact, career, dono, doctor);
+                    DoctorB doctorb = new DoctorB();
+                    doctorb.setDno_g(String.valueOf(dno.getText()));
+                    doctorb.setDname_g(String.valueOf(dname.getText()));
+                    doctorb.setDage_g(String.valueOf(dage.getText()));
+                    doctorb.setDsex_g(String.valueOf(dsex.getSelectedItem()));
+                    doctorb.setContact_g(String.valueOf(contact.getText()));
+                    doctorb.setCareer_g(String.valueOf(career.getText()));
+                    doctorb.setDono_g(String.valueOf(dono.getSelectedItem()));
+                    madao.update_doctor(dname, dage, dsex, contact, career, dono, doctorb);
                 }
             }
         });
@@ -468,9 +468,9 @@ public class manage extends JFrame {
                 if (dno.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "请输入编号输入有误", "提示信息", JOptionPane.WARNING_MESSAGE);
                 } else {
-                    Doctor doctor = new Doctor();
-                    doctor.setDno(String.valueOf(dno.getText()));
-                    madao.seedoctor(dname, dage, dsex, contact, career, dono, doctor);
+                    DoctorB doctorb = new DoctorB();
+                    doctorb.setDno(String.valueOf(dno.getText()));
+                    madao.seedoctor(dname, dage, dsex, contact, career, dono, doctorb);
                 }
             }
         });
@@ -636,14 +636,14 @@ public class manage extends JFrame {
                 if (nno.getText().isEmpty()) {
                     JOptionPane.showMessageDialog(null, "请输入编号输入有误", "提示信息", JOptionPane.WARNING_MESSAGE);
                 } else {
-                    Nurse nurse = new Nurse();
-                    nurse.setNno(String.valueOf(nno.getText()));
-                    nurse.setNname(String.valueOf(nname.getText()));
-                    nurse.setNage(String.valueOf(nage.getText()));
-                    nurse.setNsex(String.valueOf(nsex.getSelectedItem()));
-                    nurse.setContact(String.valueOf(ncontact.getText()));
-                    nurse.setCareer(String.valueOf(ncareer.getText()));
-                    madao.update_nurse(nurse);
+                    NurseB nurseb = new NurseB();
+                    nurseb.setNno(String.valueOf(nno.getText()));
+                    nurseb.setNname(String.valueOf(nname.getText()));
+                    nurseb.setNage(String.valueOf(nage.getText()));
+                    nurseb.setNsex(String.valueOf(nsex.getSelectedItem()));
+                    nurseb.setContact(String.valueOf(ncontact.getText()));
+                    nurseb.setCareer(String.valueOf(ncareer.getText()));
+                    madao.update_nurse(nurseb);
                 }
             }
         });
@@ -694,7 +694,7 @@ public class manage extends JFrame {
                 sickroomp.setVisible(false);
                 nursep.setVisible(false);
                 doctorp.setVisible(true);
-                Doctordao dd = new Doctordao();
+                DoctorDao dd = new DoctorDao();
                 dd.show(data_d);
             }
         });
@@ -716,7 +716,7 @@ public class manage extends JFrame {
                 doctorp.setVisible(false);
                 patientp.setVisible(false);
                 sickroomp.setVisible(true);
-                Sickroomdao sd = new Sickroomdao();
+                SickroomDao sd = new SickroomDao();
                 sd.show(data);
             }
         });
@@ -747,9 +747,9 @@ public class manage extends JFrame {
         });
         添加病房.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                ArrayList<Mark> marks = Managedao.room();
-                for (Mark mark : marks) {
-                    mno.addItem(mark.getMno());
+                ArrayList<MarkB> markBS = ManageDao.room();
+                for (MarkB markb : markBS) {
+                    mno.addItem(markb.getMno());
                 }
                 tz.setText("sickroom");
                 String tt = tz.getText();

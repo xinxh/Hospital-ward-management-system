@@ -1,6 +1,6 @@
 package javabean;
 
-public class Office {
+public class OfficeB {
     private String oname;
 
     public String getOname() {

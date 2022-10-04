@@ -1,6 +1,6 @@
 package javabean;
 
-public class Patient {
+public class PatientB {
     private String pno;
     private String pname;
     private String psex;
@@ -13,7 +13,81 @@ public class Patient {
     private String surplus;
     private String dname_p;
     private String nname_p;
+    //////////////患者自己查询
+    private String pno_c;
+    private String pname_c;
+    private String page_c;
+    private String surplus_c;
+    private String dname_c;
+    private String nname_c;
+    private String mon_c;
+    private String bno_c;
 
+    public String getBno_c() {
+        return bno_c;
+    }
+
+    public void setBno_c(String bno_c) {
+        this.bno_c = bno_c;
+    }
+
+    public String getPno_c() {
+        return pno_c;
+    }
+
+    public void setPno_c(String pno_c) {
+        this.pno_c = pno_c;
+    }
+
+    public String getPname_c() {
+        return pname_c;
+    }
+
+    public void setPname_c(String pname_c) {
+        this.pname_c = pname_c;
+    }
+
+    public String getPage_c() {
+        return page_c;
+    }
+
+    public void setPage_c(String page_c) {
+        this.page_c = page_c;
+    }
+
+    public String getSurplus_c() {
+        return surplus_c;
+    }
+
+    public void setSurplus_c(String surplus_c) {
+        this.surplus_c = surplus_c;
+    }
+
+    public String getDname_c() {
+        return dname_c;
+    }
+
+    public void setDname_c(String dname_c) {
+        this.dname_c = dname_c;
+    }
+
+    public String getNname_c() {
+        return nname_c;
+    }
+
+    public void setNname_c(String nname_c) {
+        this.nname_c = nname_c;
+    }
+
+    public String getMon_c() {
+        return mon_c;
+    }
+
+    public void setMon_c(String mon_c) {
+        this.mon_c = mon_c;
+    }
+
+    ////////////
     public String getDname_p() {
         return dname_p;
     }

@@ -1,6 +1,6 @@
 package javabean;
 
-public class Doctor {
+public class DoctorB {
     private String dno;
     private String dname;
     private String dsex;
@@ -71,7 +71,6 @@ public class Doctor {
     public void setContact_g(String contact_g) {
         this.contact_g = contact_g;
     }
-
 
 
     public String getDno() {

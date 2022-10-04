@@ -1,6 +1,6 @@
 package javabean;
 
-public class Mark {
+public class MarkB {
     private String mno;
     private String dname;
     private String nname;
