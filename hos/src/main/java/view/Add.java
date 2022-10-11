@@ -456,25 +456,25 @@ public class Add extends JFrame {
 
         // 选择跳转的功能
         switch (text) {
-            case "patient" : {
+            case "patient" -> {
                 adddoctor.setVisible(false);
                 addsickroom.setVisible(false);
                 addnurse.setVisible(false);
                 addpatient.setVisible(true);
             }
-            case "doctor" : {
+            case "doctor" -> {
                 addsickroom.setVisible(false);
                 addnurse.setVisible(false);
                 addpatient.setVisible(false);
                 adddoctor.setVisible(true);
             }
-            case "sickroom" : {
+            case "sickroom" -> {
                 addnurse.setVisible(false);
                 addpatient.setVisible(false);
                 adddoctor.setVisible(false);
                 addsickroom.setVisible(true);
             }
-            case "nurse" : {
+            case "nurse" -> {
                 addsickroom.setVisible(false);
                 addpatient.setVisible(false);
                 adddoctor.setVisible(false);
