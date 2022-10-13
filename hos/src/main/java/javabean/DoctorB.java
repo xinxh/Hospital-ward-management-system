@@ -16,34 +16,6 @@ public class DoctorB {
     private String contact_g;
     private String Dono_g;
 
-    private String pno_d;
-    private String pno_d1;
-    private String cure_d;
-
-    public String getPno_d1() {
-        return pno_d1;
-    }
-
-    public void setPno_d1(String pno_d1) {
-        this.pno_d1 = pno_d1;
-    }
-
-    public String getPno_d() {
-        return pno_d;
-    }
-
-    public void setPno_d(String pno_d) {
-        this.pno_d = pno_d;
-    }
-
-    public String getCure_d() {
-        return cure_d;
-    }
-
-    public void setCure_d(String cure_d) {
-        this.cure_d = cure_d;
-    }
-
     public String getDono_g() {
         return Dono_g;
     }

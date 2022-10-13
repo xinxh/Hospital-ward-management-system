@@ -9,8 +9,5 @@
         <module name="hos" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="hos" target="14" />
-    </bytecodeTargetLevel>
   </component>
 </project>

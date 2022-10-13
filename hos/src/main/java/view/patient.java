@@ -103,7 +103,6 @@ public class patient extends JFrame {
 
         cure = new JTextArea();
         cure.setBounds(93, 140, 252, 145);
-        cure.setLineWrap(true);   //实现自动换行
         contentPane.add(cure);
 
 

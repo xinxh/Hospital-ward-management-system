@@ -5,16 +5,6 @@ public class MarkB {
     private String dname;
     private String nname;
 
-
-
-    public String getMno() {
-        return mno;
-    }
-
-    public void setMno(String mno) {
-        this.mno = mno;
-    }
-
     public String getDname() {
         return dname;
     }
@@ -31,4 +21,11 @@ public class MarkB {
         this.nname = nname;
     }
 
+    public String getMno() {
+        return mno;
+    }
+
+    public void setMno(String mno) {
+        this.mno = mno;
+    }
 }

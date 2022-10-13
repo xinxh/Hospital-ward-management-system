@@ -76,8 +76,8 @@ public class SickroomDao {
                 patient[count][4] = rs.getString("Sicken");
                 patient[count][5] = rs.getString("Mno");
                 patient[count][6] = rs.getString("Bno");
-
                 count++;
+
             }
 
 

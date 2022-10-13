@@ -48,25 +48,22 @@ public class NurseDao {
     public void show(Object nurse[][]) {
         try {
             PreparedStatement ps = conn.prepareStatement("select * from nurse");
+            PreparedStatement ps1 = conn.prepareStatement("select * from nurse_scheduling");
             ResultSet rs = ps.executeQuery();
+            ResultSet rs1 = ps1.executeQuery();
             int count = 0;
             while (rs.next()) {
                 nurse[count][0] = rs.getString("Nno");
                 nurse[count][1] = rs.getString("Nname");
                 nurse[count][2] = rs.getString("Nsex");
                 nurse[count][3] = rs.getString("Contact");
-                PreparedStatement ps1 = conn.prepareStatement("select * from nurse_scheduling where nno_scheduling=?");
-                ps1.setString(1,rs.getString("Nno"));
-                ResultSet rs1 = ps1.executeQuery();
-                while (rs1.next()) {
-                    if (rs1.getString("Nno_scheduling").equals(rs.getString("Nno"))){
-                        nurse[count][4] = rs1.getString("Time");
-                    }
-
-                }
                 count++;
             }
-
+            count = 0;
+            while (rs1.next()) {
+                nurse[count][4] = rs1.getString("Time");
+                count++;
+            }
         } catch (SQLException e) {
             // TODO 自动生成的 catch 块
             e.printStackTrace();

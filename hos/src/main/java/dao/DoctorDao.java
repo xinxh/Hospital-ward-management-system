@@ -73,9 +73,9 @@ public class DoctorDao {
     public void show(Object doctor[][]) {
         try {
             PreparedStatement ps = conn.prepareStatement("select * from doctor");
-
+            PreparedStatement ps1 = conn.prepareStatement("select * from doctor_scheduling");
             ResultSet rs = ps.executeQuery();
-
+            ResultSet rs1 = ps1.executeQuery();
             int count = 0;
             while (rs.next()) {
                 doctor[count][0] = rs.getString("Dno");
@@ -83,18 +83,13 @@ public class DoctorDao {
                 doctor[count][2] = rs.getString("Dsex");
                 doctor[count][3] = rs.getString("Career");
                 doctor[count][4] = rs.getString("Contact");
-                PreparedStatement ps1 = conn.prepareStatement("select * from doctor_scheduling where dno_scheduling=?");
-                ps1.setString(1,rs.getString("Dno"));
-                ResultSet rs1 = ps1.executeQuery();
-                    while (rs1.next()) {
-                        if (rs1.getString("Dno_scheduling").equals(rs.getString("Dno"))){
-                            doctor[count][5] = rs1.getString("Time");
-                        }
-                    }
                 count++;
             }
-
-
+            count = 0;
+            while (rs1.next()) {
+                doctor[count][5] = rs1.getString("Time");
+                count++;
+            }
         } catch (SQLException e) {
             // TODO 自动生成的 catch 块
             e.printStackTrace();
@@ -114,61 +109,19 @@ public class DoctorDao {
                 doctor_p[count][1] = rs1.getString("Pname");
                 doctor_p[count][2] = rs1.getString("Psex");
                 doctor_p[count][3] = rs1.getString("Sicken");
+                count++;
 
                 PreparedStatement ps2 = conn.prepareStatement("select * from cure where pno=?");
                 ps2.setString(1, rs1.getString("Pno"));
                 ResultSet rs2 = ps2.executeQuery();
+                count = 0;
                 while (rs2.next()) {
                     doctor_p[count][4] = rs2.getString("Cname");
+                    count++;
                 }
-                count++;
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-    }
-
-    //诊断结束
-    public void deletepatient(DoctorB doctorB) {
-        PreparedStatement ps;
-        try {
-            ps = conn.prepareStatement("update patient set dno=? where pno=?");
-            ps.setString(2, doctorB.getPno_d());
-            ps.setString(1, "");
-            ps.executeUpdate();
-            JOptionPane.showMessageDialog(null, "结束成功", "提示信息", JOptionPane.WARNING_MESSAGE);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "结束失败", "提示信息", JOptionPane.WARNING_MESSAGE);
-
-        }
-    }
-
-    //更改治疗方案
-    public void updatecure(DoctorB db1) {
-        PreparedStatement ps;
-        PreparedStatement ps1;
-
-        try {
-            ps1 = conn.prepareStatement("select * from cure where pno=?");
-            ps1.setString(1,db1.getPno_d1());
-            ResultSet rs= ps1.executeQuery();
-            if (rs.next()==true){
-                ps = conn.prepareStatement("update cure set cname=? where pno=?");
-                ps.setString(2, db1.getPno_d1());
-                ps.setString(1, db1.getCure_d());
-                ps.executeUpdate();
-                JOptionPane.showMessageDialog(null, "更改成功", "提示信息", JOptionPane.WARNING_MESSAGE);
-
-            }else{
-                JOptionPane.showMessageDialog(null, "没有此人", "提示信息", JOptionPane.WARNING_MESSAGE);
-
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            JOptionPane.showMessageDialog(null, "更改失败", "提示信息", JOptionPane.WARNING_MESSAGE);
-
         }
     }
 }

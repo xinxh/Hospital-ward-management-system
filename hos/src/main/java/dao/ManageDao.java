@@ -129,7 +129,7 @@ public class ManageDao {
     }
 
     //删除医生
-    public void deletedoctor(JTextPane dname, JTextPane dage, JComboBox dsex, JTextPane contact, JTextPane career, JComboBox dono, DoctorB doctorno) {
+    public void deletedoctor(DoctorB doctorno) {
 
         PreparedStatement ps;
         PreparedStatement ps8;//查询有没有该用户
@@ -144,13 +144,8 @@ public class ManageDao {
                 if (a == JOptionPane.YES_NO_OPTION) {
                     ps.executeUpdate();
                 }
+
                 JOptionPane.showMessageDialog(null, "删除成功", "提示信息", JOptionPane.WARNING_MESSAGE);
-                dname.setText("");
-                dage.setText("");
-                dsex.addItem("");
-                contact.setText("");
-                career.setText("");
-                dono.addItem("");
             } else {
                 JOptionPane.showMessageDialog(null, "没有该用户", "提示信息", JOptionPane.WARNING_MESSAGE);
             }

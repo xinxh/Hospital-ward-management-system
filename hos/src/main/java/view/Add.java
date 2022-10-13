@@ -11,8 +11,6 @@ import javabean.SickRoomB;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -374,9 +372,8 @@ public class Add extends JFrame {
                     OfficeB officeb = new OfficeB();
                     officeb.setOname(String.valueOf(oname_d.getSelectedItem()));
 
+//					Mark mark = new Mark();
                     dc.DoctorInsert(doctorb, officeb);
-
-
                 }
             }
         });
